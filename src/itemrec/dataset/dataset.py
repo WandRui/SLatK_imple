@@ -82,7 +82,7 @@ class IRDataset:
     - sample_negative: sample negative items for a user randomly.
 
     """
-    def __init__(self, data_dir: str, no_valid: Optional[bool] = False) -> None:
+    def __init__(self, data_dir: str, no_valid: Optional[bool] = False, truncate: Optional[int] = None) -> None:
         r"""
         ## Function
         Initialize the `IRDataset`.
@@ -92,6 +92,8 @@ class IRDataset:
             The directory of the dataset.
         no_valid: Optional[bool]
             Whether to use the valid set. Default is `False` (use valid set).
+        truncate: Optional[int]
+            Truncate the training dataset to this size for testing purposes. Default is `None` (no truncation).
         """
         super(IRDataset, self).__init__()
         self.data_dir = data_dir
@@ -100,6 +102,12 @@ class IRDataset:
         # interactions: (user_id, item_id)
         self._train_interactions = self._read_interactions(train_file)
         self._test_interactions = self._read_interactions(test_file)
+        # truncate training data if specified
+        if truncate is not None and truncate > 0:
+            import random
+            if len(self._train_interactions) > truncate:
+                random.shuffle(self._train_interactions)
+                self._train_interactions = self._train_interactions[:truncate]
         # all users and items (set), check continuous id
         users = set([user_id for user_id, _ in self._train_interactions]
             + [user_id for user_id, _ in self._test_interactions])

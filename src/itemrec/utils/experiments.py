@@ -124,7 +124,8 @@ def set_experiments_per_fold(args: Namespace, seed: int) -> Tuple[IRDataLoader, 
     set_seed(seed)
     logger.info(f"Random seed has been set to {seed} in the current fold.")
     # set up dataset
-    dataset = IRDataset(args.data_path, no_valid=args.no_valid)
+    truncate = getattr(args, 'truncate', None)
+    dataset = IRDataset(args.data_path, no_valid=args.no_valid, truncate=truncate)
     logger.info(f"Dataset has been loaded from {args.data_path}, where " \
         f"train_size={len(dataset.train_interactions)}, " \
         f"valid_size={len(dataset.valid_interactions)}, " \
@@ -280,7 +281,7 @@ def run(args: Namespace) -> None:
     num_folds = args.fold
     seeds = [args.seed + i for i in range(num_folds)]
     # Top-K metrics    
-    topks = [5, 20, 50, 100]
+    topks = [5, 10, 20, 50, 75, 100]
     final_metrics : Dict[int, Dict[str, List[float]]] = {k: {} for k in topks}  
     # training and testing of each fold
     for fold in range(num_folds):
@@ -327,7 +328,7 @@ def run_per_fold(args: Namespace, topks: List[int], seed: int,
     info = get_info(args)
     if len(info) > os.pathconf('.', 'PC_NAME_MAX'): # if info is too long, use hash
         info = hashlib.md5(info.encode()).hexdigest()
-    info += f"_fold({fold + 1})"
+    # info += f"_fold({fold + 1})"
     # set up experiment settings for each fold
     dataloader, model, optimizer = set_experiments_per_fold(args, seed)
     dataset = dataloader._dataset

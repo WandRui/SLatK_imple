@@ -447,6 +447,12 @@ def setup_dataset_parser() -> argparse.ArgumentParser:
         default=1,
         help="The fold number for cross-validation.",
     )
+    parser.add_argument(
+        "--truncate",
+        type=int,
+        default=None,
+        help="Truncate the training dataset to this size for testing purposes.",
+    )
     return parser
 
 # optim sub-parser --------------------------------------------------

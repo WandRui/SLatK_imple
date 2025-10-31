@@ -51,19 +51,6 @@ search_space_dict = {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
     },
-    'LambdaRank': {
-        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
-        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
-    },
-    'LambdaLoss': {
-        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
-        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
-    },
-    'LambdaLossAtK': {
-        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
-        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
-        'k': {'_type': 'choice', '_value': [5, 20, 50]},
-    },
     'LLPAUC': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
@@ -87,6 +74,20 @@ search_space_dict = {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
         'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+    },
+    # 以下Loss没有在文章中使用
+    'LambdaRank': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+    },
+    'LambdaLoss': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+    },
+    'LambdaLossAtK': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+        'k': {'_type': 'choice', '_value': [5, 20, 50]},
     },
     'SogCLR': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},

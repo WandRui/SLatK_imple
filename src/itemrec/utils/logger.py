@@ -78,8 +78,9 @@ def set_logfile(logger: logging.Logger, log_file: str) -> None:
         Path to the log file.
     """
     log_file = os.path.abspath(log_file)
-    if not os.path.exists(os.path.dirname(log_file)):
-        os.makedirs(os.path.dirname(log_file))
+    # if not os.path.exists(os.path.dirname(log_file)):
+    #     os.makedirs(os.path.dirname(log_file))
+    os.makedirs(os.path.dirname(log_file), exist_ok=True)
     fh = logging.FileHandler(log_file)
     fh.setLevel(logger.level)
     logger.addHandler(fh)
