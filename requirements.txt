@@ -1,0 +1,12 @@
+nni==2.10.1
+recbole==1.2.0
+torch-geometric==2.5.1
+plotly==6.3.1
+tensorboard==2.20.0
+torch-cluster>=1.6.3
+torch-scatter>=2.1.2
+torch-sparse>=0.6.18
+torch-spline-conv>=1.2.2
+pyg-lib>=0.4.0
+pyperclip==1.11.0
+pynvml==13.0.1
