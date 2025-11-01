@@ -28,7 +28,7 @@ __all__ = [
 ]
 
 # search space ------------------------------------------------------
-search_space_dict = {
+ori_search_space_dict = {
     'AdvInfoNCE': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
@@ -67,12 +67,90 @@ search_space_dict = {
         'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
         'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},   # NOTE: using the optimal value of Softmax
         'tau_beta': {'_type': 'quniform', '_value': [0.5, 3, 0.25]},
-        'k': {'_type': 'choice', '_value': [5, 20, 50]},
+        'k': {'_type': 'choice', '_value': [5, 10, 20, 50, 75, 100]},
         'epoch_quantile': {'_type': 'choice', '_value': [5, 20]},
     },
     'Softmax': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+        'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+    },
+    # 以下Loss没有在文章中使用
+    'LambdaRank': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+    },
+    'LambdaLoss': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+    },
+    'LambdaLossAtK': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+        'k': {'_type': 'choice', '_value': [5, 20, 50]},
+    },
+    'SogCLR': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+        'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+        'gamma_g': {'_type': 'choice', '_value': [0.1, 0.3, 0.5, 0.7, 0.9]},
+    },
+    'SogSLatK': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+        'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+        'tau_beta': {'_type': 'quniform', '_value': [0.5, 3, 0.25]},
+        'k': {'_type': 'choice', '_value': [5, 20, 50]},
+        'epoch_quantile': {'_type': 'choice', '_value': [5, 20]},
+        'gamma_g': {'_type': 'choice', '_value': [0.1, 0.3, 0.5, 0.7, 0.9]},
+    },
+}
+
+search_space_dict = {
+    'AdvInfoNCE': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
+        'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+        'neg_weight': {'_type': 'choice', '_value': [64]},
+        'lr_adv': {'_type': 'choice', '_value': [5e-5]},
+        'epoch_adv': {'_type': 'choice', '_value': [5]},
+    },
+    'BPR': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001, 0.0001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+    }, 
+    'BSL': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
+        'tau1': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+        'tau2': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+    },
+    'GuidedRec': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0, 1e-4, 1e-5, 1e-6]},
+    },
+    'LLPAUC': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
+        'alpha': {'_type': 'choice', '_value': [0.1, 0.3, 0.5, 0.7, 0.9]},
+        'beta': {'_type': 'choice', '_value': [0.01, 0.1]},
+    },
+    'PSL': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
+        'tau_star': {'_type': 'choice', '_value': [0.005, 0.0125, 0.025, 0.05, 0.1, 0.25]},
+    },
+    'SLatK': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
+        'tau': {'_type': 'choice', '_value': [0.05, 0.1, 0.2]},   # NOTE: using the optimal value of Softmax
+        'tau_beta': {'_type': 'choice', '_value': [0.5, 0.75, 1.5, 2.25, 2.5]},
+        'k': {'_type': 'choice', '_value': [5, 10, 20, 50, 75, 100]},
+        'epoch_quantile': {'_type': 'choice', '_value': [5, 20]},
+    },
+    'Softmax': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
         'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
     },
     # 以下Loss没有在文章中使用

@@ -1,11 +1,12 @@
 .nv
-experiment_results/
+experiment_results
 nni-experiments
 paper
-result_analysis/
-src/experiment_logs/
+result_analysis
+src/experiment_logs
 src/IR-Benchmark-Dataset
 src/nni_save
+src/.nv
 .gitignore
 
 

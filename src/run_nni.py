@@ -167,12 +167,24 @@ def parse_args() -> argparse.Namespace:
     # --- END: MODIFICATIONS FOR SCHEDULER ---
     return parser.parse_args()
 
+def get_total_trials(space: Dict[str, Any]) -> int:
+        total = 1
+        for param, config in space.items():
+            if config['_type'] == 'choice':
+                total *= len(config['_value'])
+            elif config['_type'] == 'quniform':
+                low, high, q = config['_value']
+                total *= int((high - low) / q) + 1
+            else:
+                raise ValueError(f"Unsupported hyperparameter type: {config['_type']}")
+        return total
+
 # main function -----------------------------------------------------
 def main():
     args = parse_args()
 
     # TODO: `/path/to/your/` must be replaced with the actual paths
-    save_dir = f"nni_save/{args.dataset}/{args.model}/{args.optim}"
+    save_dir = f"memory_test_save/{args.dataset}/{args.model}/{args.optim}"
     if not args.ood:
         dataset_path = f"IR-Benchmark-Dataset/data_iid/{args.dataset}"
     else:
@@ -261,17 +273,6 @@ def main():
     search_space = get_search_space(args.optim)
     experiment.config.search_space = search_space
 
-    def get_total_trials(space: Dict[str, Any]) -> int:
-        total = 1
-        for param, config in space.items():
-            if config['_type'] == 'choice':
-                total *= len(config['_value'])
-            elif config['_type'] == 'quniform':
-                low, high, q = config['_value']
-                total *= int((high - low) / q) + 1
-            else:
-                raise ValueError(f"Unsupported hyperparameter type: {config['_type']}")
-        return total
     total_trial_number = get_total_trials(search_space)
 
     experiment.config.max_trial_number = total_trial_number

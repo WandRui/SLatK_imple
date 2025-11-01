@@ -43,3 +43,20 @@ pkill -f "python scheduler.py"
 rm -rf /project/rwangcn/projects/IR-Benchmark/src/nni_save/*
 rm -rf /project/rwangcn/projects/IR-Benchmark/src/experiment_logs/*
 rm -rf /project/rwangcn/projects/IR-Benchmark/nni-experiments
+
+
+python -u test_memory.py \
+  --gpus 6,7 \
+  --concurrency 2 \
+  --start_port 50000 \
+  --wait_time 180 \
+  --max_run_time 10 \
+  --output_dir memory_test_results > memory_test_logs/test_memory.log
+
+
+pkill -f "python run_nni.py"
+pkill -f "python -u -m itemrec"
+rm -rf /project/rwangcn/projects/IR-Benchmark/src/memory_test_logs
+rm -rf /project/rwangcn/projects/IR-Benchmark/src/nni-experiments
+rm -rf /project/rwangcn/projects/IR-Benchmark/src/memory_test_save
+# rm -rf /project/rwangcn/projects/IR-Benchmark/src/memory_test_results/*
