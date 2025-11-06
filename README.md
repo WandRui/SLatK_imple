@@ -45,8 +45,18 @@ conda activate itemrec
 pip install -r requirements.txt
 ```
 
+## ⚠️ Important
+NNI will create experiment folders with experiment details under `your-home-directory/nni-experiments/`. To make this easier to manage, consider setting your home directory to current project directory by running:
+```bash
+export HOME=your-project-directory-path
+```
+
 ### Dataset Preparation
-Download datasets from [IR-Benchmark-Dataset](https://github.com/Tiny-Snow/IR-Benchmark-Dataset) and organize them in the following structure:
+The author store datasets in a different repository. Download datasets from [IR-Benchmark-Dataset](https://github.com/Tiny-Snow/IR-Benchmark-Dataset) and unzip the corresponding files by running:
+```bash
+unzip src/IR-Benchmark-Dataset/data_iid/{dataset_name}/proc.zip -d src/IR-Benchmark-Dataset/data_iid/{dataset_name}
+```
+The directory structure should look like:
 ```
 data/
 ├── amazon2014-health/proc/
