@@ -2,7 +2,8 @@
 experiment_results/
 nni-experiments/
 paper/
-result_analysis/
+result_analysis/.backup/
+result_analysis/comparison/
 src/experiment_logs/
 src/IR-Benchmark-Dataset/
 src/nni_save/
