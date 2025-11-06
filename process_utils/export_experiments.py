@@ -55,12 +55,22 @@ def ensure_results_directory():
     results_dir.mkdir(exist_ok=True)
     print(f"✓ Results directory ensured: {results_dir.absolute()}")
 
+def is_json_file_empty_list(file_path):
+    """Check if a JSON file contains an empty list."""
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        return isinstance(data, list) and len(data) == 0
+    except (FileNotFoundError, json.JSONDecodeError, Exception):
+        # If file doesn't exist or can't be parsed, consider it as needing reprocessing
+        return True
+
 def process_stopped_experiments():
     """Main function to process all stopped experiments."""
     # Get the script directory and construct path to .experiment file
-    script_dir = Path(__file__).parent
-    experiment_file = script_dir / "nni-experiments" / ".experiment"
-    
+    cur_dir = Path(os.getcwd())
+    experiment_file = cur_dir / "nni-experiments" / ".experiment"
+
     print(f"Loading experiments from: {experiment_file.absolute()}")
     
     # Load experiments
@@ -72,19 +82,41 @@ def process_stopped_experiments():
     ensure_results_directory()
 
     # list all json files in experiment_results directory
-    existing_experiments = list(Path("experiment_results").glob("*.json"))
-    existing_experiments = [path.replace(".json", "").replace("experiment_results/", "") for path in map(str, existing_experiments)]
-    # print(f"Existing processed experiments: {existing_experiments}")
+    existing_experiment_files = list(Path("experiment_results").glob("*.json"))
     
-    # Filter stopped experiments, excluding those already processed
+    # Check which experiments are valid (not empty lists)
+    valid_experiments = set()
+    empty_experiments = set()
+    
+    for json_file in existing_experiment_files:
+        experiment_name = json_file.stem  # Get filename without extension
+        if is_json_file_empty_list(json_file):
+            empty_experiments.add(experiment_name)
+            print(f"Found empty experiment file: {json_file}")
+        else:
+            valid_experiments.add(experiment_name)
+    
+    print(f"Valid experiments: {len(valid_experiments)}, Empty experiments: {len(empty_experiments)}")
+    
+    # Filter stopped experiments - process if not in valid_experiments (include empty ones for reprocessing)
     stopped_experiments = {
-        exp_id: exp_data for exp_id, exp_data in experiments.items() 
-        if exp_data.get('status') == 'STOPPED' # and f"{exp_data.get('experimentName', '')}" not in existing_experiments
+        exp_id: exp_data for exp_id, exp_data in experiments.items()
+        if exp_data.get('status') == 'STOPPED' and exp_data.get('experimentName') not in valid_experiments
     }
 
-    # print(f"\nFound {len(stopped_experiments)} stopped and unprocessed experiments out of {len(experiments)} total experiments")
-    # print(f"experiments to process: {list(stopped_experiments.keys())}")
+    # Show which experiments will be reprocessed due to empty results
+    reprocessing_experiments = []
+    for exp_id, exp_data in stopped_experiments.items():
+        if exp_data.get('experimentName') in empty_experiments:
+            reprocessing_experiments.append(f"{exp_id} ({exp_data.get('experimentName')})")
+    
+    if reprocessing_experiments:
+        print(f"\nExperiments to reprocess due to empty results: {reprocessing_experiments}")
+    
+    print(f"\nFound {len(stopped_experiments)} stopped experiments to process out of {len(experiments)} total experiments")
+    print(f"Experiments to process: {list(stopped_experiments.keys())}")
 
+    exit(0) # Comment this line to enable processing
     if not stopped_experiments:
         print("No stopped experiments to process.")
         return
@@ -109,7 +141,14 @@ def process_stopped_experiments():
         # Step 2: Export experiment (wait 2 seconds)
         print(f"\nStep 2: Exporting experiment {exp_id}")
         export_filename = f"experiment_results/{experiment_name}.json"
-        run_command(f"nnictl experiment export {exp_id} --filename {export_filename} --type json", wait_time=2)
+        export_success = run_command(f"nnictl experiment export {exp_id} --filename {export_filename} --type json", wait_time=2)
+        
+        # Check if exported file is empty
+        if export_success and Path(export_filename).exists():
+            if is_json_file_empty_list(export_filename):
+                print(f"⚠️  WARNING: Exported file {export_filename} contains an empty list - experiment may have failed!")
+            else:
+                print(f"✓ Successfully exported non-empty results to {export_filename}")
         
         # Step 3: Stop experiment
         print(f"\nStep 3: Stopping experiment {exp_id}")
@@ -126,8 +165,6 @@ if __name__ == "__main__":
     print("=" * 40)
     
     # Change to the script directory to ensure relative paths work correctly
-    script_dir = Path(__file__).parent
-    os.chdir(script_dir)
     print(f"Working directory: {os.getcwd()}")
     
     try:

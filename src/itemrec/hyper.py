@@ -122,8 +122,8 @@ search_space_dict = {
     'BSL': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0]},
-        'tau1': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
-        'tau2': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+        'tau1': {'_type': 'choice', '_value': [0.1, 0.2, 0.5]},
+        'tau2': {'_type': 'choice', '_value': [0.1, 0.2, 0.5]},
     },
     'GuidedRec': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
@@ -141,17 +141,17 @@ search_space_dict = {
         'tau_star': {'_type': 'choice', '_value': [0.005, 0.0125, 0.025, 0.05, 0.1, 0.25]},
     },
     'SLatK': {
-        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01]},
         'weight_decay': {'_type': 'choice', '_value': [0]},
         'tau': {'_type': 'choice', '_value': [0.05, 0.1, 0.2]},   # NOTE: using the optimal value of Softmax
-        'tau_beta': {'_type': 'choice', '_value': [0.5, 0.75, 1.5, 2.25, 2.5]},
+        'tau_beta': {'_type': 'choice', '_value': [0.5, 2.25, 2.5]},
         'k': {'_type': 'choice', '_value': [5, 10, 20, 50, 75, 100]},
         'epoch_quantile': {'_type': 'choice', '_value': [5, 20]},
     },
     'Softmax': {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0]},
-        'tau': {'_type': 'choice', '_value': [0.01, 0.025, 0.05, 0.1, 0.2, 0.5]},
+        'tau': {'_type': 'choice', '_value': [0.05, 0.1, 0.2]},
     },
     # 以下Loss没有在文章中使用
     'LambdaRank': {
@@ -199,6 +199,31 @@ def get_search_space(optim: str) -> Dict[str, Any]:
         the search space for hyper parameters search
     """
     return search_space_dict[optim]
+
+def get_total_trials(optim: str) -> int:
+    r"""
+    ## Function
+    Get the maximum number of trials for hyper parameters search.
+    
+    ## Arguments
+    optim: str
+        the name of the optimizer
+    
+    ## Returns
+    int
+        the maximum number of trials for hyper parameters search
+    """
+    search_space = get_search_space(optim)
+    total_trials = 1
+    for _, param in search_space.items():
+        if param['_type'] == 'choice':
+            total_trials *= len(param['_value'])
+        elif param['_type'] == 'quniform':
+            low, high, q = param['_value']
+            total_trials *= int((high - low) / q) + 1
+        else:
+            raise ValueError(f"Unsupported parameter type: {param['_type']}")
+    return total_trials
 
 # get hyper parameters ---------------------------------------------
 def get_params(args: argparse.Namespace) -> argparse.Namespace:

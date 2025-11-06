@@ -31,10 +31,9 @@ python run_nni.py \
 python -u scheduler.py \
   --gpus 4,5,6,7 \
   --concurrency 4 \
-  --trial_concurrency 32 \
-  --max_trials_per_gpu 16 \
-  --start_port 10000 \
-  --check_interval 180 > experiment_logs/scheduler.log
+  --trial_concurrency 16 \
+  --start_port 30080 \
+  --check_interval 30 > experiment_logs/scheduler.log
 
 # Cleanup commands
 pkill -f "python run_nni.py"
@@ -42,7 +41,8 @@ pkill -f "python -u -m itemrec"
 pkill -f "python scheduler.py"
 rm -rf /project/rwangcn/projects/IR-Benchmark/src/nni_save/*
 rm -rf /project/rwangcn/projects/IR-Benchmark/src/experiment_logs/*
-rm -rf /project/rwangcn/projects/IR-Benchmark/nni-experiments
+rm -rf /project/rwangcn/projects/IR-Benchmark/nni-experiments/*
+rm -rf /project/rwangcn/projects/IR-Benchmark/nni-experiments/.experiment
 
 
 python -u test_memory.py \
@@ -60,3 +60,19 @@ rm -rf /project/rwangcn/projects/IR-Benchmark/src/memory_test_logs
 rm -rf /project/rwangcn/projects/IR-Benchmark/src/nni-experiments
 rm -rf /project/rwangcn/projects/IR-Benchmark/src/memory_test_save
 # rm -rf /project/rwangcn/projects/IR-Benchmark/src/memory_test_results/*
+
+# Scheduler_plus.py
+python -u scheduler_plus.py \
+  --gpus 4,5,6,7 \
+  --max_memory_per_gpu 23000 \
+  --max_experiments_per_gpu 4 \
+  --trial_concurrency 64 \
+  --start_port 40000 \
+  --check_interval 180 > experiment_logs/scheduler_plus.log
+
+# Cleanup commands
+pkill -f "python run_nni.py"
+pkill -f "python -u -m itemrec"
+rm -rf /project/rwangcn/projects/IR-Benchmark/src/nni_save/*
+rm -rf /project/rwangcn/projects/IR-Benchmark/src/experiment_logs/*
+rm -rf /project/rwangcn/projects/IR-Benchmark/nni-experiments/*

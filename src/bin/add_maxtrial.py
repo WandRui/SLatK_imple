@@ -2,7 +2,7 @@ import json
 from itemrec.hyper import get_search_space
 from run_nni import get_total_trials
 
-with open("memory_test_results/memory_test_results_1761987418.json", "r") as f:
+with open("memory_test_results/memory_test.json", "r") as f:
     data = json.load(f)
 
 results = []
@@ -11,8 +11,6 @@ for entry in data:
     search_space = get_search_space(optim)
     total_trials = get_total_trials(search_space)
     entry["maxTrial"] = total_trials
-    for key in ["gpu_id", "port", "baseline_memory_mb", "current_memory_mb", "timestamp"]:
-        del entry[key]
     results.append(entry)
 
 print(len(results))

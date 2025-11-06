@@ -9,42 +9,29 @@ from typing import List, Dict, Any
 from nni.experiment import Experiment
 from tqdm import tqdm
 from itemrec.port_handle import find_available_port
+from itemrec.hyper import get_total_trials
 
 
 # --- Global state for signal handling ---
 running_processes: Dict[int, Dict[str, Any]] = {}
 
-# Model-specific maximum trials per GPU
-MODEL_SPECIFIC_CONFIG = {
-    'MF': {
-        'max_trials_per_gpu': 32  # MF is lightweight, can run many trials.
-    },
-    'LightGCN': {
-        'max_trials_per_gpu': 16  # LightGCN is moderately heavy.
-    },
-    'XSimGCL': {
-        'max_trials_per_gpu': 8   # XSimGCL is memory-intensive.
-    }
-    # Add other models here if they have different requirements.
-}
-
 def get_experiment_configs() -> List[Dict[str, Any]]:
     """Generates all experiment configurations."""
     MODELS = ("MF", "LightGCN", "XSimGCL")
-    LOSSES = ("BPR", "GuidedRec", "LLPAUC", "Softmax", "AdvInfoNCE", "BSL", "PSL", "SLatK")
+    LOSSES = ("LLPAUC", "Softmax", "AdvInfoNCE", "BSL", "PSL", "SLatK", "BPR", "GuidedRec")
     DATASETS = ("amazon2014-health", "amazon2014-electronic", "amazon2014-book", "gowalla")
     
     configs = []
     for dataset in DATASETS:
-        for optim in LOSSES:
-            for model in MODELS:
+        for model in MODELS:
+            for optim in LOSSES:
                 config = {
                     "model": model,
                     "dataset": dataset,
                     "optim": optim,
                     "norm": True,
                     "fold": 1,
-                    "num_epochs": 200,
+                    "num_epochs": 100,
                 }
                 configs.append(config)
     return configs
@@ -56,8 +43,11 @@ def cleanup(signum, frame):
     for port, info in list(running_processes.items()):
         print(f"  - Stopping experiment on port {port}...")
         try:
-            experiment = Experiment.connect(port)
-            experiment.stop()
+            # Stop experiment via command line API
+            # nnictl stop --port <port>
+            subprocess.run(["nnictl", "stop", "--port", str(port)], check=True)
+            # experiment = Experiment.connect(port)
+            # experiment.stop()
             print(f"    Successfully stopped NNI experiment on port {port} via API.")
         except Exception as e:
             print(f"    Could not stop NNI experiment on port {port} via API: {e}")
@@ -103,6 +93,17 @@ def main(args):
                 print("----------------------------------------")
 
                 info['log_file'].close()
+
+                # Stop the experiment via NNI API to ensure proper cleanup
+                try:
+                    experiment = Experiment.connect(port)
+                    experiment.stop()
+                    print(f"    Successfully stopped NNI experiment on port {port} via API.")
+                except Exception as e:
+                    print(f"    Could not stop NNI experiment on port {port} via API: {e}")
+                    print(f"    Terminating process PID {info['process'].pid} directly.")
+                    info['process'].terminate()
+
                 del running_processes[port]
                 # --- START: MODIFICATIONS FOR SCHEDULER ---
                 # Decrement the load count for the GPU that has been freed up.
@@ -112,7 +113,7 @@ def main(args):
                 pbar.update(1)
                 pbar.set_postfix_str(f"Running: {len(running_processes)}")
 
-                time.sleep(5)
+                time.sleep(10)  # Brief pause to ensure resources are freed
 
         # --- 2. Launch new experiments if resources are available ---
         # --- START: MODIFICATIONS FOR SCHEDULER ---
@@ -124,14 +125,16 @@ def main(args):
             # --- END: MODIFICATIONS FOR SCHEDULER ---
             
             config_to_run = configs_to_run.popleft()
-            max_trials_per_gpu = MODEL_SPECIFIC_CONFIG.get(config_to_run['model'], {}).get('max_trials_per_gpu', args.max_trials_per_gpu)
+            # Calculate total trials for this optimizer and set max_trials_per_gpu to min(16, total_trials)
+            total_trials = get_total_trials(config_to_run['optim'])
+            max_trials_per_gpu = min(16, total_trials)
             port_to_use = find_available_port(next_port)
             next_port = port_to_use + 1
 
             print(f"\n--- Launching Experiment on Port {port_to_use} (GPU {gpu_to_use}) ---")
             print(f"Model: {config_to_run['model']}, Dataset: {config_to_run['dataset']}, Optimizer: {config_to_run['optim']}")
-            print(f"Assigned GPU: {gpu_to_use}, Max Trials per GPU: {max_trials_per_gpu}")
-            print(f"Current GPU Loads: {gpu_loads}")
+            print(f"Total trials: {total_trials}, Max Trials per GPU: {max_trials_per_gpu}")
+            print(f"Assigned GPU: {gpu_to_use}, Current GPU Loads: {gpu_loads}")
             print(f"Experiments remaining: {len(configs_to_run)}")
             print("----------------------------------------")
             
@@ -186,7 +189,7 @@ if __name__ == "__main__":
     parser.add_argument('--gpus', type=lambda s: [int(item) for item in s.split(',')], required=True, help='Comma-separated list of GPU indices to use (e.g., "0,1,2,3").')
     parser.add_argument('--concurrency', type=int, default=8, help='Maximum number of experiments to run in parallel.')
     parser.add_argument('--trial_concurrency', type=int, default=128, help='Number of concurrent trials for each experiment.')
-    parser.add_argument('--max_trials_per_gpu', type=int, default=32, help='Maximum number of concurrent trials for each experiment on its assigned GPU. (This is overridden by model-specific settings if applicable.)')
+    parser.add_argument('--max_trials_per_gpu', type=int, default=16, help='Default maximum number of concurrent trials for each experiment on its assigned GPU. (This is now automatically set to min(16, total_trials) for each optimizer.)')
     parser.add_argument('--start_port', type=int, default=50000, help='The starting port number for NNI experiments.')
     parser.add_argument('--check_interval', type=int, default=60, help='Seconds to wait between checking experiment statuses.')
     

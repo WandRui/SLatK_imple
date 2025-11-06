@@ -1,0 +1,288 @@
+MaxTrial: 16
+python run_nni.py --model MF --dataset amazon2014-health --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index 4 --max_trials_per_gpu 16 --trial_concurrency 256 --port 50000 > experiment_logs/amazon2014-health_MF_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model MF --dataset amazon2014-health --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index 4 --max_trials_per_gpu 12 --trial_concurrency 256 --port 50001 > experiment_logs/amazon2014-health_MF_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model MF --dataset amazon2014-health --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index 4 --max_trials_per_gpu 10 --trial_concurrency 256 --port 50002 > experiment_logs/amazon2014-health_MF_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-health --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index 5 --max_trials_per_gpu 8 --trial_concurrency 256 --port 50003 > experiment_logs/amazon2014-health_MF_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-health --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index 6 --max_trials_per_gpu 8 --trial_concurrency 256 --port 50004 > experiment_logs/amazon2014-health_MF_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model MF --dataset amazon2014-health --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index 7 --max_trials_per_gpu 8 --trial_concurrency 256 --port 50005 > experiment_logs/amazon2014-health_MF_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-health --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50006 > experiment_logs/amazon2014-health_MF_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model MF --dataset amazon2014-health --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50007 > experiment_logs/amazon2014-health_MF_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50008 > experiment_logs/amazon2014-health_LightGCN_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50009 > experiment_logs/amazon2014-health_LightGCN_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50010 > experiment_logs/amazon2014-health_LightGCN_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50011 > experiment_logs/amazon2014-health_LightGCN_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50012 > experiment_logs/amazon2014-health_LightGCN_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50013 > experiment_logs/amazon2014-health_LightGCN_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50014 > experiment_logs/amazon2014-health_LightGCN_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model LightGCN --dataset amazon2014-health --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50015 > experiment_logs/amazon2014-health_LightGCN_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50016 > experiment_logs/amazon2014-health_XSimGCL_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50017 > experiment_logs/amazon2014-health_XSimGCL_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50018 > experiment_logs/amazon2014-health_XSimGCL_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50019 > experiment_logs/amazon2014-health_XSimGCL_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50020 > experiment_logs/amazon2014-health_XSimGCL_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50021 > experiment_logs/amazon2014-health_XSimGCL_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50022 > experiment_logs/amazon2014-health_XSimGCL_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model XSimGCL --dataset amazon2014-health --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50023 > experiment_logs/amazon2014-health_XSimGCL_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model MF --dataset amazon2014-electronic --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50024 > experiment_logs/amazon2014-electronic_MF_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model MF --dataset amazon2014-electronic --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50025 > experiment_logs/amazon2014-electronic_MF_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model MF --dataset amazon2014-electronic --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50026 > experiment_logs/amazon2014-electronic_MF_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-electronic --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50027 > experiment_logs/amazon2014-electronic_MF_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-electronic --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50028 > experiment_logs/amazon2014-electronic_MF_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model MF --dataset amazon2014-electronic --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50029 > experiment_logs/amazon2014-electronic_MF_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-electronic --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50030 > experiment_logs/amazon2014-electronic_MF_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model MF --dataset amazon2014-electronic --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50031 > experiment_logs/amazon2014-electronic_MF_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50032 > experiment_logs/amazon2014-electronic_LightGCN_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50033 > experiment_logs/amazon2014-electronic_LightGCN_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50034 > experiment_logs/amazon2014-electronic_LightGCN_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50035 > experiment_logs/amazon2014-electronic_LightGCN_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50036 > experiment_logs/amazon2014-electronic_LightGCN_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50037 > experiment_logs/amazon2014-electronic_LightGCN_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50038 > experiment_logs/amazon2014-electronic_LightGCN_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model LightGCN --dataset amazon2014-electronic --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50039 > experiment_logs/amazon2014-electronic_LightGCN_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50040 > experiment_logs/amazon2014-electronic_XSimGCL_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50041 > experiment_logs/amazon2014-electronic_XSimGCL_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50042 > experiment_logs/amazon2014-electronic_XSimGCL_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50043 > experiment_logs/amazon2014-electronic_XSimGCL_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50044 > experiment_logs/amazon2014-electronic_XSimGCL_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50045 > experiment_logs/amazon2014-electronic_XSimGCL_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50046 > experiment_logs/amazon2014-electronic_XSimGCL_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model XSimGCL --dataset amazon2014-electronic --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50047 > experiment_logs/amazon2014-electronic_XSimGCL_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model MF --dataset amazon2014-book --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50048 > experiment_logs/amazon2014-book_MF_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model MF --dataset amazon2014-book --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50049 > experiment_logs/amazon2014-book_MF_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model MF --dataset amazon2014-book --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50050 > experiment_logs/amazon2014-book_MF_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-book --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50051 > experiment_logs/amazon2014-book_MF_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-book --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50052 > experiment_logs/amazon2014-book_MF_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model MF --dataset amazon2014-book --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50053 > experiment_logs/amazon2014-book_MF_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset amazon2014-book --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50054 > experiment_logs/amazon2014-book_MF_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model MF --dataset amazon2014-book --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50055 > experiment_logs/amazon2014-book_MF_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50056 > experiment_logs/amazon2014-book_LightGCN_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50057 > experiment_logs/amazon2014-book_LightGCN_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50058 > experiment_logs/amazon2014-book_LightGCN_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50059 > experiment_logs/amazon2014-book_LightGCN_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50060 > experiment_logs/amazon2014-book_LightGCN_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50061 > experiment_logs/amazon2014-book_LightGCN_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50062 > experiment_logs/amazon2014-book_LightGCN_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model LightGCN --dataset amazon2014-book --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50063 > experiment_logs/amazon2014-book_LightGCN_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50064 > experiment_logs/amazon2014-book_XSimGCL_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50065 > experiment_logs/amazon2014-book_XSimGCL_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50066 > experiment_logs/amazon2014-book_XSimGCL_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50067 > experiment_logs/amazon2014-book_XSimGCL_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50068 > experiment_logs/amazon2014-book_XSimGCL_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50069 > experiment_logs/amazon2014-book_XSimGCL_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50070 > experiment_logs/amazon2014-book_XSimGCL_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model XSimGCL --dataset amazon2014-book --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50071 > experiment_logs/amazon2014-book_XSimGCL_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model MF --dataset gowalla --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50072 > experiment_logs/gowalla_MF_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model MF --dataset gowalla --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50073 > experiment_logs/gowalla_MF_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model MF --dataset gowalla --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50074 > experiment_logs/gowalla_MF_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset gowalla --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50075 > experiment_logs/gowalla_MF_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset gowalla --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50076 > experiment_logs/gowalla_MF_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model MF --dataset gowalla --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50077 > experiment_logs/gowalla_MF_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model MF --dataset gowalla --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50078 > experiment_logs/gowalla_MF_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model MF --dataset gowalla --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50079 > experiment_logs/gowalla_MF_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model LightGCN --dataset gowalla --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50080 > experiment_logs/gowalla_LightGCN_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model LightGCN --dataset gowalla --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50081 > experiment_logs/gowalla_LightGCN_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model LightGCN --dataset gowalla --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50082 > experiment_logs/gowalla_LightGCN_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset gowalla --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50083 > experiment_logs/gowalla_LightGCN_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset gowalla --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50084 > experiment_logs/gowalla_LightGCN_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model LightGCN --dataset gowalla --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index 4 --max_trials_per_gpu 1 --trial_concurrency 256 --port 50085 > experiment_logs/gowalla_LightGCN_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model LightGCN --dataset gowalla --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50086 > experiment_logs/gowalla_LightGCN_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model LightGCN --dataset gowalla --optim SLatK --fold 1 --num_epochs 100 --norm --gpu_index 4 --max_trials_per_gpu 16 --trial_concurrency 256 --port 50087 > experiment_logs/gowalla_LightGCN_SLatK.log 2>&1 &
+
+MaxTrial: 16
+python run_nni.py --model XSimGCL --dataset gowalla --optim BPR --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50088 > experiment_logs/gowalla_XSimGCL_BPR.log 2>&1 &
+
+MaxTrial: 12
+python run_nni.py --model XSimGCL --dataset gowalla --optim GuidedRec --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50089 > experiment_logs/gowalla_XSimGCL_GuidedRec.log 2>&1 &
+
+MaxTrial: 30
+python run_nni.py --model XSimGCL --dataset gowalla --optim LLPAUC --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50090 > experiment_logs/gowalla_XSimGCL_LLPAUC.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset gowalla --optim Softmax --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50091 > experiment_logs/gowalla_XSimGCL_Softmax.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset gowalla --optim AdvInfoNCE --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50092 > experiment_logs/gowalla_XSimGCL_AdvInfoNCE.log 2>&1 &
+
+MaxTrial: 108
+python run_nni.py --model XSimGCL --dataset gowalla --optim BSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50093 > experiment_logs/gowalla_XSimGCL_BSL.log 2>&1 &
+
+MaxTrial: 18
+python run_nni.py --model XSimGCL --dataset gowalla --optim PSL --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50094 > experiment_logs/gowalla_XSimGCL_PSL.log 2>&1 &
+
+MaxTrial: 540
+python run_nni.py --model XSimGCL --dataset gowalla --optim SLatK --fold 1 --num_epochs 200 --norm --gpu_index  --max_trials_per_gpu  --trial_concurrency 256 --port 50095 > experiment_logs/gowalla_XSimGCL_SLatK.log 2>&1 &
+

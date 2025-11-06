@@ -136,7 +136,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         '--num_workers',
         type=int,
-        default=16,
+        default=8,
         help='The number of workers for the data loader'
     )
     parser.add_argument(
@@ -184,7 +184,7 @@ def main():
     args = parse_args()
 
     # TODO: `/path/to/your/` must be replaced with the actual paths
-    save_dir = f"memory_test_save/{args.dataset}/{args.model}/{args.optim}"
+    save_dir = f"nni_save/{args.dataset}/{args.model}/{args.optim}"
     if not args.ood:
         dataset_path = f"IR-Benchmark-Dataset/data_iid/{args.dataset}"
     else:
@@ -243,7 +243,7 @@ def main():
         f"--save_dir={save_dir} " \
         f"--seed=2024 " \
         f"model --emb_size=64 " + norm_cmd + f"--num_epochs={args.num_epochs} " + model_cmd + \
-        f"dataset --data_path={dataset_path} --batch_size=1024 --num_workers={args.num_workers} " \
+        f"dataset --data_path={dataset_path} --batch_size=256 --num_workers={args.num_workers} " \
             + ("--no_valid " if args.ood or args.no_valid else "") \
             + f"--sampler={args.sampler} --epoch_sampler={args.epoch_sampler} --fold={args.fold} " + \
         f"optim --lr=1e-1 --weight_decay=0.0 " + optim_cmd
@@ -279,12 +279,12 @@ def main():
     # experiment.config.max_exec_duration = '2h'
 
     # Grid Search has no optimize mode
-    experiment.config.tuner.name = 'GridSearch'
+    # experiment.config.tuner.name = 'GridSearch'
     
-    # experiment.config.tuner.name = 'TPE'
-    # experiment.config.tuner.class_args = {
-    #     'optimize_mode': 'maximize'
-    # }
+    experiment.config.tuner.name = 'TPE'
+    experiment.config.tuner.class_args = {
+        'optimize_mode': 'maximize'
+    }
 
     # Check if the port is available
     if is_port_available(args.port) is False:

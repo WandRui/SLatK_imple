@@ -25,7 +25,7 @@
         "model": "MF",
         "optim": "Softmax",
         "experiment_memory_mb": 2106,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-health",
@@ -39,7 +39,7 @@
         "model": "MF",
         "optim": "BSL",
         "experiment_memory_mb": 2106,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-health",
@@ -53,7 +53,7 @@
         "model": "MF",
         "optim": "SLatK",
         "experiment_memory_mb": 2108,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-health",
@@ -81,7 +81,7 @@
         "model": "LightGCN",
         "optim": "Softmax",
         "experiment_memory_mb": 2110,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-health",
@@ -95,7 +95,7 @@
         "model": "LightGCN",
         "optim": "BSL",
         "experiment_memory_mb": 2110,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-health",
@@ -109,7 +109,7 @@
         "model": "LightGCN",
         "optim": "SLatK",
         "experiment_memory_mb": 2112,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-health",
@@ -137,7 +137,7 @@
         "model": "XSimGCL",
         "optim": "Softmax",
         "experiment_memory_mb": 2372,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-health",
@@ -151,7 +151,7 @@
         "model": "XSimGCL",
         "optim": "BSL",
         "experiment_memory_mb": 2372,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-health",
@@ -165,7 +165,7 @@
         "model": "XSimGCL",
         "optim": "SLatK",
         "experiment_memory_mb": 2372,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-electronic",
@@ -193,7 +193,7 @@
         "model": "MF",
         "optim": "Softmax",
         "experiment_memory_mb": 2354,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-electronic",
@@ -207,7 +207,7 @@
         "model": "MF",
         "optim": "BSL",
         "experiment_memory_mb": 2354,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-electronic",
@@ -221,7 +221,7 @@
         "model": "MF",
         "optim": "SLatK",
         "experiment_memory_mb": 2374,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-electronic",
@@ -249,7 +249,7 @@
         "model": "LightGCN",
         "optim": "Softmax",
         "experiment_memory_mb": 2140,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-electronic",
@@ -263,7 +263,7 @@
         "model": "LightGCN",
         "optim": "BSL",
         "experiment_memory_mb": 2140,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-electronic",
@@ -277,7 +277,7 @@
         "model": "LightGCN",
         "optim": "SLatK",
         "experiment_memory_mb": 2140,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-electronic",
@@ -305,7 +305,7 @@
         "model": "XSimGCL",
         "optim": "Softmax",
         "experiment_memory_mb": 2420,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-electronic",
@@ -318,8 +318,8 @@
         "dataset": "amazon2014-electronic",
         "model": "XSimGCL",
         "optim": "BSL",
-        "experiment_memory_mb": 3,
-        "maxTrial": 108
+        "experiment_memory_mb": 320,
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-electronic",
@@ -333,7 +333,7 @@
         "model": "XSimGCL",
         "optim": "SLatK",
         "experiment_memory_mb": 2420,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-book",
@@ -361,14 +361,14 @@
         "model": "MF",
         "optim": "Softmax",
         "experiment_memory_mb": 2474,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-book",
         "model": "MF",
         "optim": "BSL",
         "experiment_memory_mb": 2474,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-book",
@@ -389,7 +389,7 @@
         "model": "MF",
         "optim": "SLatK",
         "experiment_memory_mb": 2398,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-book",
@@ -417,13 +417,13 @@
         "model": "LightGCN",
         "optim": "Softmax",
         "experiment_memory_mb": 2772,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-book",
         "model": "LightGCN",
         "optim": "AdvInfoNCE",
-        "experiment_memory_mb": 3,
+        "experiment_memory_mb": 320,
         "maxTrial": 18
     },
     {
@@ -431,7 +431,7 @@
         "model": "LightGCN",
         "optim": "BSL",
         "experiment_memory_mb": 3,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-book",
@@ -445,7 +445,7 @@
         "model": "LightGCN",
         "optim": "SLatK",
         "experiment_memory_mb": 2814,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "amazon2014-book",
@@ -473,7 +473,7 @@
         "model": "XSimGCL",
         "optim": "Softmax",
         "experiment_memory_mb": 3040,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "amazon2014-book",
@@ -487,7 +487,7 @@
         "model": "XSimGCL",
         "optim": "BSL",
         "experiment_memory_mb": 3,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "amazon2014-book",
@@ -501,7 +501,7 @@
         "model": "XSimGCL",
         "optim": "SLatK",
         "experiment_memory_mb": 3084,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "gowalla",
@@ -529,7 +529,7 @@
         "model": "MF",
         "optim": "Softmax",
         "experiment_memory_mb": 2386,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "gowalla",
@@ -543,7 +543,7 @@
         "model": "MF",
         "optim": "BSL",
         "experiment_memory_mb": 0,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "gowalla",
@@ -557,7 +557,7 @@
         "model": "MF",
         "optim": "SLatK",
         "experiment_memory_mb": 2398,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "gowalla",
@@ -585,7 +585,7 @@
         "model": "LightGCN",
         "optim": "Softmax",
         "experiment_memory_mb": 2270,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "gowalla",
@@ -599,7 +599,7 @@
         "model": "LightGCN",
         "optim": "BSL",
         "experiment_memory_mb": 6352,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "gowalla",
@@ -613,7 +613,7 @@
         "model": "LightGCN",
         "optim": "SLatK",
         "experiment_memory_mb": 2280,
-        "maxTrial": 540
+        "maxTrial": 216
     },
     {
         "dataset": "gowalla",
@@ -641,7 +641,7 @@
         "model": "XSimGCL",
         "optim": "Softmax",
         "experiment_memory_mb": 2352,
-        "maxTrial": 18
+        "maxTrial": 9
     },
     {
         "dataset": "gowalla",
@@ -655,7 +655,7 @@
         "model": "XSimGCL",
         "optim": "BSL",
         "experiment_memory_mb": 3,
-        "maxTrial": 108
+        "maxTrial": 27
     },
     {
         "dataset": "gowalla",
@@ -669,6 +669,6 @@
         "model": "XSimGCL",
         "optim": "SLatK",
         "experiment_memory_mb": 2372,
-        "maxTrial": 540
+        "maxTrial": 216
     }
 ]
