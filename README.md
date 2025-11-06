@@ -45,7 +45,7 @@ conda activate itemrec
 pip install -r requirements.txt
 ```
 
-## ⚠️ Important
+#### ⚠️ Important
 NNI will create experiment folders with experiment details under `your-home-directory/nni-experiments/`. To make this easier to manage, consider setting your home directory to current project directory by running:
 ```bash
 export HOME=your-project-directory-path
