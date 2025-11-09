@@ -1,4 +1,4 @@
-# Table 4: 不同K值的SL@K方法性能对比
+# Table 4: Performance Comparison of SL@K Method with Different K Values
 
 | Dataset | Metric | Our_SL@5 | Author_SL@5 | Diff | Our_SL@10 | Author_SL@10 | Diff | Our_SL@20 | Author_SL@20 | Diff | Our_SL@50 | Author_SL@50 | Diff | Our_SL@75 | Author_SL@75 | Diff | Our_SL@100 | Author_SL@100 | Diff | Our_SL (@∞) | Author_SL (@∞) | Diff |
 |---------|--------|-----------|-------------|------|-----------|-------------|------|-----------|-------------|------|-----------|-------------|------|-----------|-------------|------|-----------|-------------|------|-----------|-------------|------|
@@ -16,10 +16,10 @@
 | Health | NDCG@75 | 0.1913 | 0.1906 | 0.0007 | 0.1909 | 0.1909 | -0.0000 | 0.1903 | 0.1909 | -0.0006 | 0.1905 | 0.1901 | 0.0004 | 0.1906 | 0.1916 | -0.0010 | 0.1905 | 0.1904 | 0.0001 | N/A | 0.1791 | N/A |
 | Health | NDCG@100 | 0.2030 | 0.2032 | -0.0002 | 0.2032 | 0.2028 | 0.0004 | 0.2025 | 0.2029 | -0.0004 | 0.2027 | 0.2020 | 0.0007 | 0.2029 | 0.2031 | -0.0002 | 0.2029 | 0.2035 | -0.0006 | N/A | 0.1924 | N/A |
 
-## 说明
-- Our_SL@K: 我们的实验结果
-- Author_SL@K: 作者的实验结果
-- Diff: 差值（我们的结果 - 作者的结果）
-- 正值（绿色）表示我们的结果更好，负值（红色）表示作者的结果更好
-- 差值绝对值 ≤ 0.01 的结果未标色
-- SL@K 表示使用K值进行训练的SL方法，SL (@∞) 表示使用无限K值（标准SL）
+## Notes
+- Our_SL@K: Our experiment results
+- Author_SL@K: Author's experiment results
+- Diff: Difference (our results - author's results)
+- Positive values (green) indicate our results are better, negative values (red) indicate author's results are better
+- Results with absolute difference ≤ 0.01 are not colored
+- SL@K indicates SL method trained with K value, SL (@∞) indicates infinite K value (standard SL)

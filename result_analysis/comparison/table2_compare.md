@@ -1,6 +1,6 @@
-# 实验结果对比
+# Experiment Results Comparison
 
-以下是我们的实验结果与作者结果的对比：
+The following is a comparison between our experiment results and the author's results:
 
 | dataset | backbone | loss | Our_Recall@20 | Author_Recall@20 | Recall_Diff | Our_NDCG@20 | Author_NDCG@20 | NDCG_Diff | Author_Recall_Imp% | Author_NDCG_Imp% | Our_Recall_Imp% | Our_NDCG_Imp% |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -64,11 +64,11 @@
 | health | XSimGCL | SONGatK | 0.1281 | 0.1378 | -0.0097 | 0.0929 | 0.0948 | -0.0019 |  |  |  |  |
 | health | XSimGCL | Softmax | 0.1630 | 0.1534 | 0.0096 | 0.1183 | 0.1113 | 0.0070 |  |  |  |  |
 
-## 说明
-- Our_Recall@20/Our_NDCG@20: 我们的实验结果
-- Author_Recall@20/Author_NDCG@20: 作者的实验结果
-- Recall_Diff/NDCG_Diff: 差值（我们的结果 - 作者的结果）
-- Author_Recall_Imp%/Author_NDCG_Imp%: 作者论文中SL@K相对于最好baseline的提升百分比（仅对SLatK方法显示）
-- Our_Recall_Imp%/Our_NDCG_Imp%: 我们复现结果中SL@K相对于最好baseline的提升百分比（仅对SLatK方法显示）
-- 正值表示我们的结果更好，负值表示作者的结果更好
-- 差值绝对值 ≤ 0.01 的结果未标色，差值 > 0.01 的结果标绿，差值 < -0.01 的结果标红
+## Notes
+- Our_Recall@20/Our_NDCG@20: Our experiment results
+- Author_Recall@20/Author_NDCG@20: Author's experiment results
+- Recall_Diff/NDCG_Diff: Difference (our results - author's results)
+- Author_Recall_Imp%/Author_NDCG_Imp%: Author's improvement percentage of SL@K relative to best baseline (only shown for SLatK method)
+- Our_Recall_Imp%/Our_NDCG_Imp%: Our reproduction improvement percentage of SL@K relative to best baseline (only shown for SLatK method)
+- Positive values indicate our results are better, negative values indicate author's results are better
+- Results with absolute difference ≤ 0.01 are not colored, differences > 0.01 are marked green, differences < -0.01 are marked red

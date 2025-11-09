@@ -1,4 +1,4 @@
-# Table 3: MF Backbone NDCG@K 比较结果
+# Table 3: MF Backbone NDCG@K Comparison Results
 
 | Dataset | Method | Our_NDCG@5 | Author_NDCG@5 | Diff | Author_Imp% | Our_Imp% | Our_NDCG@10 | Author_NDCG@10 | Diff | Author_Imp% | Our_Imp% | Our_NDCG@20 | Author_NDCG@20 | Diff | Author_Imp% | Our_Imp% | Our_NDCG@50 | Author_NDCG@50 | Diff | Author_Imp% | Our_Imp% | Our_NDCG@75 | Author_NDCG@75 | Diff | Author_Imp% | Our_Imp% | Our_NDCG@100 | Author_NDCG@100 | Diff | Author_Imp% | Our_Imp% |
 |---------|--------|------------|---------------|------|-------------|-----------|------------|---------------|------|-------------|-----------|------------|---------------|------|-------------|-----------|------------|---------------|------|-------------|-----------|------------|---------------|------|-------------|-----------|------------|---------------|------|-------------|-----------|
@@ -21,11 +21,11 @@
 | Health | SLatK | 0.1064 | 0.1080 | -0.0016 | <span style="color:blue">+14.89% (vs BPR)</span> | <span style="color:blue">+14.15% (vs PSL)</span> | 0.1161 | 0.1190 | -0.0029 | <span style="color:blue">+13.55% (vs PSL)</span> | <span style="color:blue">+11.61% (vs PSL)</span> | 0.1371 | 0.1390 | -0.0019 | <span style="color:blue">+9.62% (vs PSL)</span> | <span style="color:blue">+9.54% (vs PSL)</span> | 0.1725 | 0.1736 | -0.0011 | <span style="color:blue">+7.09% (vs BPR)</span> | <span style="color:blue">+7.10% (vs AdvInfoNCE)</span> | 0.1899 | 0.1916 | -0.0017 | <span style="color:blue">+6.21% (vs BPR)</span> | <span style="color:blue">+5.77% (vs Softmax)</span> | 0.2016 | 0.2035 | -0.0019 | <span style="color:blue">+5.71% (vs BPR)</span> | <span style="color:blue">+5.10% (vs AdvInfoNCE)</span> |
 | Health | SONGatK | 0.0852 | N/A | N/A |  |  | 0.0935 | N/A | N/A |  |  | 0.1153 | N/A | N/A |  |  | 0.1503 | N/A | N/A |  |  | 0.1678 | N/A | N/A |  |  | 0.1802 | N/A | N/A |  |  |
 | Health | Softmax | 0.0924 | 0.0922 | 0.0002 |  |  | 0.1026 | 0.1037 | -0.0011 |  |  | 0.1242 | 0.1261 | -0.0019 |  |  | 0.1604 | 0.1620 | -0.0016 |  |  | 0.1796 | 0.1791 | 0.0005 |  |  | 0.1911 | 0.1924 | -0.0013 |  |  |
-## 说明
-- Our_NDCG@K: 我们的实验结果
-- Author_NDCG@K: 作者的实验结果
-- Diff: 差值（我们的结果 - 作者的结果）
-- Author_Imp%: 作者论文中SL@K相对于最好baseline的提升百分比（仅对SLatK方法显示）
-- Our_Imp%: 我们复现结果中SL@K相对于最好baseline的提升百分比（仅对SLatK方法显示）
-- 正值（绿色）表示我们的结果更好，负值（红色）表示作者的结果更好
-- 差值绝对值 ≤ 0.01 的结果未标色
+## Notes
+- Our_NDCG@K: Our experiment results
+- Author_NDCG@K: Author's experiment results
+- Diff: Difference (our results - author's results)
+- Author_Imp%: Author's improvement percentage of SL@K relative to best baseline (only shown for SLatK method)
+- Our_Imp%: Our reproduction improvement percentage of SL@K relative to best baseline (only shown for SLatK method)
+- Positive values (green) indicate our results are better, negative values (red) indicate author's results are better
+- Results with absolute difference ≤ 0.01 are not colored
