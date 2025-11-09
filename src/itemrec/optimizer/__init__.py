@@ -20,4 +20,5 @@ from .optim_SLatK import *
 from .optim_Softmax import *
 from .optim_SogCLR import *
 from .optim_SogSLatK import *
+from .optim_SONGatK import *
 

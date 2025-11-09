@@ -184,6 +184,8 @@ class AuthorResultLoader:
                                 method_name = method
                                 if method == "SL":
                                     method_name = "Softmax"
+                                elif method == "SONG@20":
+                                    method_name = "SONGatK"
                                 baselines[method_name] = values
                         
                         # 找到Recall@20和NDCG@20的最佳baseline
@@ -233,6 +235,8 @@ class AuthorResultLoader:
                             loss_name = "Softmax"  # 假设SL对应Softmax
                         elif loss == "SL@20 (Ours)":
                             loss_name = "SLatK"  # 假设这是我们的SLatK方法
+                        elif loss == "SONG@20":
+                            loss_name = "SONGatK"  # SONG@20对应我们的SONGatK方法
                         
                         # metrics 是一个列表 [recall_value, ndcg_value]
                         if isinstance(metrics, list) and len(metrics) >= 2:
@@ -278,6 +282,8 @@ class AuthorResultLoader:
                             method_name = method
                             if method == "SL":
                                 method_name = "Softmax"
+                            elif method == "SONG@20":
+                                method_name = "SONGatK"
                             baselines[method_name] = values
                     
                     # 为每个K值找到最佳baseline并标注
@@ -315,6 +321,8 @@ class AuthorResultLoader:
                         loss_name = "Softmax"
                     elif method == "SL@K (Ours)":
                         loss_name = "SLatK"
+                    elif method == "SONG@20":
+                        loss_name = "SONGatK"
                     
                     # 存储每个 K 值的结果
                     for i, k in enumerate(k_values):

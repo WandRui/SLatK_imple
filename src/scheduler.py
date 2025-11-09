@@ -17,14 +17,16 @@ running_processes: Dict[int, Dict[str, Any]] = {}
 
 def get_experiment_configs() -> List[Dict[str, Any]]:
     """Generates all experiment configurations."""
-    MODELS = ("MF", "LightGCN", "XSimGCL")
-    LOSSES = ("LLPAUC", "Softmax", "AdvInfoNCE", "BSL", "PSL", "SLatK", "BPR", "GuidedRec")
-    DATASETS = ("amazon2014-health", "amazon2014-electronic", "amazon2014-book", "gowalla")
+    MODELS = ("XSimGCL",) # "MF", "LightGCN", 
+    LOSSES = ("SONGatK", "Softmax",) # "LLPAUC", "Softmax", "AdvInfoNCE", "BSL", "PSL", "BPR", "GuidedRec", "SONGatK"
+    DATASETS = ("amazon2014-health", "amazon2014-electronic",) # "amazon2014-book", "gowalla",
     
     configs = []
     for dataset in DATASETS:
         for model in MODELS:
             for optim in LOSSES:
+                if optim == "Softmax" and dataset == "amazon2014-electronic":
+                    continue
                 config = {
                     "model": model,
                     "dataset": dataset,
@@ -127,7 +129,7 @@ def main(args):
             config_to_run = configs_to_run.popleft()
             # Calculate total trials for this optimizer and set max_trials_per_gpu to min(16, total_trials)
             total_trials = get_total_trials(config_to_run['optim'])
-            max_trials_per_gpu = min(16, total_trials)
+            max_trials_per_gpu = min(args.max_trials_per_gpu, total_trials)
             port_to_use = find_available_port(next_port)
             next_port = port_to_use + 1
 

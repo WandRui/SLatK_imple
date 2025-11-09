@@ -263,6 +263,14 @@ def set_experiments_per_fold(args: Namespace, seed: int) -> Tuple[IRDataLoader, 
         logger.info(f"Built SogSLatKOptimizer(lr={args.lr}, weight_decay={args.weight_decay}, " \
             f"neg_num={args.neg_num}, tau={args.tau}, tau_beta={args.tau_beta}, " \
             f"K={args.k}, epoch_quantile={args.epoch_quantile}, gamma_g={args.gamma_g}).")
+    elif args.optim == 'SONGatK':
+        optimizer = SONGatKOptimizer(model, args.lr, args.weight_decay,
+            neg_num=args.neg_num, tau=args.tau, tau_beta=args.tau_beta, K=args.k,
+            epoch_quantile=args.epoch_quantile, gamma_g=args.gamma_g,
+            train_dict=dataset.train_dict)
+        logger.info(f"Built SONGatKOptimizer(lr={args.lr}, weight_decay={args.weight_decay}, " \
+            f"neg_num={args.neg_num}, tau={args.tau}, tau_beta={args.tau_beta}, " \
+            f"K={args.k}, epoch_quantile={args.epoch_quantile}, gamma_g={args.gamma_g}).")
     else:
         raise ValueError(f"Invalid optimizer: {args.optim}.")
     return dataloader, model, optimizer
@@ -457,6 +465,9 @@ def get_info(args: Namespace) -> str:
     elif args.optim == 'SogSLatK':
         info += f"_neg({args.neg_num})_tau({args.tau})_tau_beta({args.tau_beta})" \
             f"_K({args.k})_epoch_quantile({args.epoch_quantile})_gamma_g({args.gamma_g})"
+    elif args.optim == 'SONGatK':
+        info += f"_neg({args.neg_num})_tau({args.tau})_tau_beta({args.tau_beta})" \
+                f"_k({args.k})_epoch_quantile({args.epoch_quantile})_gamma_g({args.gamma_g})"
     else:
         raise ValueError(f"Invalid optimizer: {args.optim}.")
     # add dataset info

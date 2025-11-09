@@ -960,6 +960,48 @@ def setup_optim_parser() -> argparse.ArgumentParser:
         default=0.9,
         help="The hyperparameter for the moving average estimator.",
     )
+    # optim: SONGatK
+    songatk_parser = optim_subparsers.add_parser(
+        "SONGatK",
+        help="The SONGatK optimizer for ItemRec.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    songatk_parser.add_argument(
+        "--neg_num",
+        type=int,
+        default=1000,
+        help="The number of negative items for each user.",
+    )
+    songatk_parser.add_argument(
+        "--tau",
+        type=float,
+        default=1.0,
+        help="The temperature for the softmax function.",
+    )
+    songatk_parser.add_argument(
+        "--tau_beta",
+        type=float,
+        default=1.0,
+        help="The temperature for the softmax weights.",
+    )
+    songatk_parser.add_argument(
+        "--k",
+        type=int,
+        default=20,
+        help="The Top-K value.",
+    )
+    songatk_parser.add_argument(
+        "--epoch_quantile",
+        type=int,
+        default=20,
+        help="The epoch interval for the quantile regression.",
+    )
+    songatk_parser.add_argument(
+        "--gamma_g",
+        type=float,
+        default=0.9,
+        help="The hyperparameter for the moving average estimator.",
+    )
     return parser
 
 def merge_args(args1: argparse.Namespace, args2: argparse.Namespace) -> argparse.Namespace:

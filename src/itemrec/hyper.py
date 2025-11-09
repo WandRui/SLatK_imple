@@ -136,12 +136,12 @@ search_space_dict = {
         'beta': {'_type': 'choice', '_value': [0.01, 0.1]},
     },
     'PSL': {
-        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01]},
         'weight_decay': {'_type': 'choice', '_value': [0]},
         'tau_star': {'_type': 'choice', '_value': [0.005, 0.0125, 0.025, 0.05, 0.1, 0.25]},
     },
     'SLatK': {
-        'lr': {'_type': 'choice', '_value': [0.1, 0.01]},
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0]},
         'tau': {'_type': 'choice', '_value': [0.05, 0.1, 0.2]},   # NOTE: using the optimal value of Softmax
         'tau_beta': {'_type': 'choice', '_value': [0.5, 2.25, 2.5]},
@@ -152,6 +152,15 @@ search_space_dict = {
         'lr': {'_type': 'choice', '_value': [0.1, 0.01, 0.001]},
         'weight_decay': {'_type': 'choice', '_value': [0]},
         'tau': {'_type': 'choice', '_value': [0.05, 0.1, 0.2]},
+    },
+    'SONGatK': {
+        'lr': {'_type': 'choice', '_value': [0.1, 0.01]},
+        'weight_decay': {'_type': 'choice', '_value': [0]},
+        'tau': {'_type': 'choice', '_value': [0.05, 0.1, 0.2]},
+        'tau_beta': {'_type': 'choice', '_value': [0.5, 2.25, 2.5]},
+        'k': {'_type': 'choice', '_value': [20]},
+        'epoch_quantile': {'_type': 'choice', '_value': [5, 20]},
+        'gamma_g': {'_type': 'choice', '_value': [0.1, 0.5, 0.9]},
     },
     # 以下Loss没有在文章中使用
     'LambdaRank': {

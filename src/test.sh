@@ -29,11 +29,12 @@ python run_nni.py \
 
 # Run the scheduler
 python -u scheduler.py \
-  --gpus 4,5,6,7 \
-  --concurrency 4 \
-  --trial_concurrency 16 \
-  --start_port 30080 \
-  --check_interval 30 > experiment_logs/scheduler.log
+  --gpus 6,7 \
+  --concurrency 2 \
+  --max_trials_per_gpu 12 \
+  --trial_concurrency 64 \
+  --start_port 32080 \
+  --check_interval 60 > experiment_logs/health_XSimGCL_scheduler.log
 
 # Cleanup commands
 pkill -f "python run_nni.py"

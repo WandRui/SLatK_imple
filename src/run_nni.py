@@ -148,7 +148,7 @@ def parse_args() -> argparse.Namespace:
     # --- START: MODIFICATIONS FOR SCHEDULER ---
     parser.add_argument(
         '--gpu_index',
-        type=int,
+        type=lambda s: [int(item) for item in s.split(',')],
         required=True,
         help='The index of the GPU to use for this experiment.'
     )
@@ -234,6 +234,8 @@ def main():
         optim_cmd = f"SogCLR --neg_num={args.neg_num} --tau=0.2 --gamma_g=0.9 "
     elif args.optim == 'SogSLatK':
         optim_cmd = f"SogSLatK --neg_num={args.neg_num} --tau=0.2 --tau_beta=1.0 --k={args.k} --epoch_quantile=5 --gamma_g=0.9 "
+    elif args.optim == 'SONGatK':
+        optim_cmd = f"SONGatK --neg_num={args.neg_num} --tau=0.2 --k={args.k} --epoch_quantile=5 --gamma_g=0.9 "
     else:
         raise ValueError(f"Invalid optimizer: {args.optim}")
 
@@ -263,7 +265,7 @@ def main():
     
     experiment.config.training_service.max_trial_number_per_gpu = args.max_trials_per_gpu
     # Assign the experiment to one specific GPU
-    experiment.config.training_service.gpu_indices = [args.gpu_index]
+    experiment.config.training_service.gpu_indices = args.gpu_index
     # --- END: MODIFICATIONS FOR SCHEDULER ---
     experiment.config.training_service.platform = 'local'
     experiment.config.training_service.use_active_gpu = True
@@ -313,3 +315,17 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# Example command to run with SONGatK optimizer:
+'''
+python -u run_nni.py \
+    --model MF \
+    --dataset amazon2014-health \
+    --optim Softmax \
+    --num_epochs 100 \
+    --gpu_index 4,5,6,7 \
+    --max_trials_per_gpu 12 \
+    --trial_concurrency 64 \
+    --port 50000
+'''

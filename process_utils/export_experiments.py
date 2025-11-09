@@ -114,9 +114,12 @@ def process_stopped_experiments():
         print(f"\nExperiments to reprocess due to empty results: {reprocessing_experiments}")
     
     print(f"\nFound {len(stopped_experiments)} stopped experiments to process out of {len(experiments)} total experiments")
-    print(f"Experiments to process: {list(stopped_experiments.keys())}")
+    # Find name of stopped experiments
+    for exp_id, exp_data in stopped_experiments.items():
+        print(f" - ID: {exp_id}, Name: {exp_data.get('experimentName', 'N/A')}")
+    
 
-    exit(0) # Comment this line to enable processing
+    # exit(0) # Comment this line to enable processing
     if not stopped_experiments:
         print("No stopped experiments to process.")
         return
@@ -136,12 +139,12 @@ def process_stopped_experiments():
         
         # Step 1: View experiment (wait 2 seconds)
         print(f"\nStep 1: Viewing experiment {exp_id}")
-        run_command(f"nnictl view {exp_id} --port {exp_data.get('port', 8080)}", wait_time=2)
+        run_command(f"nnictl view {exp_id} --port {exp_data.get('port', 8080)}", wait_time=8)
         
         # Step 2: Export experiment (wait 2 seconds)
         print(f"\nStep 2: Exporting experiment {exp_id}")
         export_filename = f"experiment_results/{experiment_name}.json"
-        export_success = run_command(f"nnictl experiment export {exp_id} --filename {export_filename} --type json", wait_time=2)
+        export_success = run_command(f"nnictl experiment export {exp_id} --filename {export_filename} --type json", wait_time=5)
         
         # Check if exported file is empty
         if export_success and Path(export_filename).exists():
