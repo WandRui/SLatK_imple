@@ -7,6 +7,7 @@ src/experiment_logs/
 src/IR-Benchmark-Dataset/
 src/nni_save/
 src/.nv/
-comparison.zip
-
+logs/
+zipped_result/
+code_contribution.md
 

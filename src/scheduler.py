@@ -17,16 +17,14 @@ running_processes: Dict[int, Dict[str, Any]] = {}
 
 def get_experiment_configs() -> List[Dict[str, Any]]:
     """Generates all experiment configurations."""
-    MODELS = ("XSimGCL",) # "MF", "LightGCN", 
-    LOSSES = ("SONGatK", "Softmax",) # "LLPAUC", "Softmax", "AdvInfoNCE", "BSL", "PSL", "BPR", "GuidedRec", "SONGatK"
-    DATASETS = ("amazon2014-health", "amazon2014-electronic",) # "amazon2014-book", "gowalla",
+    MODELS = ("MF", "XSimGCL", "LightGCN") # 
+    LOSSES = ("SLatK", "PSL", "Softmax", "BPR", "LLPAUC", "AdvInfoNCE", "BSL", "GuidedRec", "SONGatK") # 
+    DATASETS = ("amazon2014-book",) # "amazon2014-health", "amazon2014-electronic", "gowalla"
     
     configs = []
     for dataset in DATASETS:
         for model in MODELS:
             for optim in LOSSES:
-                if optim == "Softmax" and dataset == "amazon2014-electronic":
-                    continue
                 config = {
                     "model": model,
                     "dataset": dataset,

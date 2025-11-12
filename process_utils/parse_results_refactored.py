@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+'''
+python process_utils/parse_results_refactored.py --root experiment_results --output_dir result_analysis/comparison
+'''
+
+'''
+zip -r zipped_result/comparisonV2.zip result_analysis/comparison
+'''
+
 """
 Summary of Amazon2014 Experiment Results - Refactored Version
 author: you
@@ -8,9 +17,10 @@ import json
 import os
 import pathlib
 import argparse
+import csv
+import pandas as pd
 from collections import defaultdict
 from typing import List, Dict, Tuple, Optional, Any
-import pandas as pd
 
 METRICS = ["Recall@20", "NDCG@20"]  # Metrics of interest
 
@@ -59,15 +69,24 @@ class ExperimentParser:
             print(f"[WARN] {path} read failed: {e}")
             return []
 
-        # Filename format: ItemRec-amazon2014-health-LightGCN-BPR.json
+        # Filename format: 
+        # ItemRec-amazon2014-health-LightGCN-BPR.json (for amazon2014 datasets)
+        # ItemRec-gowalla-LightGCN-BPR.json (for gowalla dataset)
         parts = path.stem.split("-")
-        if len(parts) < 5:
+        if len(parts) < 4:
             print(f"[WARN] {path} filename format incorrect, skipping")
             return []
 
-        dataset = parts[2]  # health / electronic / book
-        backbone = parts[3]  # LightGCN / MF / XSimGCL
-        loss = parts[4]  # BPR / SL / PSL / Softmax / ...
+        if len(parts) >= 5:
+            # Amazon2014 format: ItemRec-amazon2014-health-LightGCN-BPR.json
+            dataset = parts[2]  # health / electronic / book
+            backbone = parts[3]  # LightGCN / MF / XSimGCL
+            loss = parts[4]  # BPR / SL / PSL / Softmax / ...
+        else:
+            # Gowalla format: ItemRec-gowalla-LightGCN-BPR.json
+            dataset = parts[1]  # gowalla
+            backbone = parts[2]  # LightGCN / MF / XSimGCL
+            loss = parts[3]  # BPR / SL / PSL / Softmax / ...
 
         records = []
         for trial in data:
@@ -146,6 +165,27 @@ class BestRecordSelector:
             best.append(top)
         return best
 
+    def pick_best_for_table3_extended(self, records: List[ExperimentRecord]) -> List[ExperimentRecord]:
+        """
+        Group by dataset-backbone-loss, keep the one with highest NDCG@20 in each group
+        For SLatK, select the best trial across all K values (not restricted to k=20)
+        This is used for Table 3 extended analysis to find the optimal SL@K configuration
+        """
+        group = defaultdict(list)
+        for r in records:
+            key = (r.dataset, r.backbone, r.loss)
+            group[key].append(r)
+
+        best = []
+        for key, rows in group.items():
+            dataset, backbone, loss = key
+            
+            # For all losses including SLatK, directly select the one with highest NDCG@20
+            # This allows SLatK to use its optimal K value rather than being restricted to K=20
+            top = max(rows, key=lambda x: x.get_metric("NDCG@20"))
+            best.append(top)
+        return best
+
 
 class AuthorResultLoader:
     """Author result loader"""
@@ -168,7 +208,7 @@ class AuthorResultLoader:
             for backbone, backbone_content in data["results"].items():
                 for dataset, dataset_content in backbone_content.items():
                     # Map dataset name to our format
-                    dataset_name = dataset.lower()  # Health -> health, Electronic -> electronic, Book -> book
+                    dataset_name = dataset.lower()  # Health -> health, Electronic -> electronic, Book -> book, Gowalla -> gowalla
                     
                     # Extract original Imp% information
                     if "Imp. %" in dataset_content:
@@ -431,16 +471,17 @@ class ImprovementCalculator:
         """
         Calculate improvement percentage of SL@K method relative to best baseline in Table 3 for our reproduction results (consistent with author's calculation method)
         Returns: (our_table3_imp_dict, table3_baseline_dict)
+        Note: Only process datasets that have author table3 results (health, electronic)
         """
         our_table3_imp_dict = {}
         table3_baseline_dict = {}  # Store best baseline information
         k_values = [5, 10, 20, 50, 75, 100]
         
-        # Filter MF backbone results on health/electronic datasets
+        # Filter MF backbone results on health/electronic datasets (only datasets with author table3 results)
         mf_records = [r for r in best_records 
                       if r.backbone == "MF" and r.dataset in ["health", "electronic"]]
         
-        # Group by dataset
+        # Group by dataset (only process datasets with author table3 results)
         for dataset in ["health", "electronic"]:
             dataset_records = [r for r in mf_records if r.dataset == dataset]
             
@@ -569,13 +610,14 @@ class ComparisonTableGenerator:
                                 table3_imp_dict: Dict[str, List[str]]) -> List[Dict[str, Any]]:
         """
         Create Table 3 style comparison table (MF backbone NDCG@K results)
+        Note: Only process datasets that have author table3 results (health, electronic)
         """
-        # Filter MF backbone results on health/electronic datasets
+        # Filter MF backbone results on health/electronic datasets (only datasets with author table3 results)
         mf_records = [r for r in best_records 
                       if r.backbone == "MF" and r.dataset in ["health", "electronic"]]
         
         k_values = [5, 10, 20, 50, 75, 100]
-        datasets = ["health", "electronic"]
+        datasets = ["health", "electronic"]  # Only datasets with author table3 results
         
         # Calculate our improvement percentages
         our_table3_imp_dict, _ = self.improvement_calculator.calculate_our_table3_improvement(best_records)
@@ -652,13 +694,14 @@ class ComparisonTableGenerator:
         """
         Create Table 4 style comparison table (Performance comparison of SL@K method with different K values)
         Note: This requires using all original records, not filtered optimal records, because we need SLatK experiment results with different K values
+        Note: Only process datasets that have author table4 results (health, electronic)
         """
-        # Filter SLatK method results on health/electronic datasets
+        # Filter SLatK method results on health/electronic datasets (only datasets with author table4 results)
         slatk_records = [r for r in all_records 
                          if r.loss == "SLatK" and r.dataset in ["health", "electronic"]]
         
         k_values = [5, 10, 20, 50, 75, 100]
-        datasets = ["health", "electronic"]
+        datasets = ["health", "electronic"]  # Only datasets with author table4 results
         
         table4_data = []
         
@@ -735,6 +778,177 @@ class ComparisonTableGenerator:
                     row_data[f"Our_{variant}"] = our_value
                     row_data[f"Author_{variant}"] = author_value
                     row_data[f"Diff_{variant}"] = diff
+                
+                table4_data.append(row_data)
+        
+        return table4_data
+
+    def create_extended_ndcg_table(self, best_records: List[ExperimentRecord], 
+                                   backbone: str, extended_records: List[ExperimentRecord]) -> List[Dict[str, Any]]:
+        """
+        Create extended NDCG@K table for specified backbone (XSimGCL or LightGCN)
+        Similar to Table 3 but for different backbone architectures
+        Note: Only process datasets health, electronic (same as Table 3)
+        Note: Uses extended_records which allows SLatK to use optimal K value (not restricted to K=20)
+        """
+        # Filter specified backbone results on health/electronic datasets
+        backbone_records = [r for r in extended_records 
+                           if r.backbone == backbone and r.dataset in ["health", "electronic"]]
+        
+        k_values = [5, 10, 20, 50, 75, 100]
+        datasets = ["health", "electronic"]
+        
+        # Calculate improvement percentages for this backbone
+        our_imp_dict = {}
+        
+        # Group by dataset
+        for dataset in datasets:
+            dataset_records = [r for r in backbone_records if r.dataset == dataset]
+            
+            # Find SLatK method results
+            slatk_record = next((r for r in dataset_records if r.loss == "SLatK"), None)
+            if not slatk_record:
+                continue
+            
+            # Find other method results
+            other_records = [r for r in dataset_records if r.loss != "SLatK"]
+            if not other_records:
+                continue
+            
+            # Calculate improvement percentage relative to best baseline for each K value
+            improvements = []
+            for k in k_values:
+                ndcg_key = f"NDCG@{k}"
+                slatk_value = slatk_record.get_metric(ndcg_key)
+                
+                if slatk_value is None or slatk_value == "N/A":
+                    improvements.append("N/A")
+                    continue
+                
+                # Find best baseline for this K value and corresponding method
+                best_baseline_value = 0
+                best_baseline_method = "N/A"
+                for other_record in other_records:
+                    other_value = other_record.get_metric(ndcg_key)
+                    if other_value is not None and other_value != "N/A" and other_value > best_baseline_value:
+                        best_baseline_value = other_value
+                        best_baseline_method = other_record.loss
+                
+                if best_baseline_value > 0:
+                    imp = (slatk_value - best_baseline_value) / best_baseline_value * 100
+                    improvements.append(f"{imp:+.2f}% (vs {best_baseline_method})")
+                else:
+                    improvements.append("N/A")
+            
+            our_imp_dict[dataset] = improvements
+        
+        # Get all available loss functions
+        available_losses = list(set([r.loss for r in backbone_records]))
+        available_losses.sort()
+        
+        extended_table_data = []
+        
+        for dataset in datasets:
+            for loss in available_losses:
+                row_data = {
+                    "dataset": dataset.capitalize(),
+                    "backbone": backbone,
+                    "loss": loss,
+                }
+                
+                # Find corresponding record
+                record = next((r for r in backbone_records 
+                             if r.dataset == dataset and r.loss == loss), None)
+                
+                # Get our Imp% information (only for SLatK method)
+                our_imp_info = our_imp_dict.get(dataset, ["N/A"] * 6)
+                
+                if record:
+                    # Add our results
+                    for i, k in enumerate(k_values):
+                        ndcg_key = f"NDCG@{k}"
+                        our_value = record.get_metric(ndcg_key)
+                        if our_value is None:
+                            our_value = "N/A"
+                        
+                        row_data[f"NDCG@{k}"] = our_value
+                        
+                        # Add our Imp% information (only for SLatK)
+                        if loss == "SLatK" and i < len(our_imp_info):
+                            row_data[f"Imp%_NDCG@{k}"] = our_imp_info[i]
+                        else:
+                            row_data[f"Imp%_NDCG@{k}"] = ""
+                else:
+                    # If no record found, fill with N/A
+                    for k in k_values:
+                        row_data[f"NDCG@{k}"] = "N/A"
+                        row_data[f"Imp%_NDCG@{k}"] = ""
+                
+                extended_table_data.append(row_data)
+        
+        return extended_table_data
+
+    def create_backbone_table4_analysis(self, all_records: List[ExperimentRecord], 
+                                        backbone: str) -> List[Dict[str, Any]]:
+        """
+        Create Table 4 style analysis for specified backbone (Performance comparison of SL@K method with different K values)
+        Similar to create_table4_comparison but for any backbone (not just MF with author comparison)
+        Note: Only process datasets health, electronic (same as original Table 4)
+        """
+        # Filter SLatK method results for specified backbone on health/electronic datasets
+        slatk_records = [r for r in all_records 
+                         if r.loss == "SLatK" and r.backbone == backbone and r.dataset in ["health", "electronic"]]
+        
+        k_values = [5, 10, 20, 50, 75, 100]
+        datasets = ["health", "electronic"]
+        
+        table4_data = []
+        
+        # If no SLatK experiment results, return empty
+        if not slatk_records:
+            print(f"[INFO] No SLatK experiment results found for {backbone} backbone")
+            return table4_data
+        
+        for dataset in datasets:
+            # Find corresponding records for this dataset and backbone
+            dataset_records = [r for r in slatk_records if r.dataset == dataset]
+            
+            if not dataset_records:
+                continue
+                
+            # Create a row of data for each NDCG@K
+            for k in k_values:
+                row_data = {
+                    "dataset": dataset.capitalize(),
+                    "backbone": backbone,
+                    "metric": f"NDCG@{k}",
+                }
+                
+                # Get our results - collect from SLatK records with different K parameter values
+                our_values = {}
+                for record in dataset_records:
+                    ndcg_key = f"NDCG@{k}"
+                    our_value = record.get_metric(ndcg_key)
+                    if our_value is not None:
+                        # Distinguish different SL@K variants based on K value in experiment parameters
+                        k_param = record.param.get("k") or record.param.get("K")
+                        if k_param is not None:
+                            variant = f"SL@{k_param}"
+                            our_values[variant] = our_value
+                
+                # If no variants found for this metric, skip this row
+                if not our_values:
+                    continue
+                
+                # Sort variant names by K value
+                sorted_variants = sorted(our_values.keys(), key=lambda x: (
+                    999 if "∞" in x else int(x.split("@")[1]) if "@" in x and x.split("@")[1].isdigit() else 0
+                ))
+                
+                # Add results for each variant
+                for variant in sorted_variants:
+                    our_value = our_values[variant]
+                    row_data[f"NDCG@{k}_{variant}"] = our_value
                 
                 table4_data.append(row_data)
         
@@ -1036,6 +1250,170 @@ class MarkdownFormatter:
         
         return markdown
 
+    def to_extended_ndcg_markdown(self, extended_data: List[Dict[str, Any]], backbone: str) -> str:
+        """
+        Convert extended NDCG@K data to markdown format (for XSimGCL or LightGCN backbone)
+        """
+        if not extended_data:
+            return f"# Table 3 Extended: {backbone} Backbone NDCG@K Results\n\nNo relevant data found.\n"
+        
+        k_values = [5, 10, 20, 50, 75, 100]
+        
+        # Group by dataset
+        grouped_data = defaultdict(list)
+        for row in extended_data:
+            key = row["dataset"]
+            grouped_data[key].append(row)
+        
+        # Sort by key
+        sorted_groups = sorted(grouped_data.items())
+        
+        markdown = f"# Table 3 Extended: {backbone} Backbone NDCG@K Results\n\n"
+        markdown += f"This table shows NDCG@K results for {backbone} backbone on Health and Electronic datasets, "
+        markdown += "extending the analysis beyond MF backbone to test generalizability.\n\n"
+        
+        # Create unified table header
+        header = "| Dataset | Method |"
+        for k in k_values:
+            header += f" NDCG@{k} | Imp% |"
+        header += "\n"
+        
+        # Create separator line
+        separator = "|---------|--------|"
+        for k in k_values:
+            separator += "----------|------|"
+        separator += "\n"
+        
+        markdown += header + separator
+        
+        # Add data rows, separated by groups
+        first_group = True
+        for dataset_name, group_data in sorted_groups:
+            
+            # If not first group, add separator line
+            if not first_group:
+                sep_line = "|---------|--------|"
+                for k in k_values:
+                    sep_line += "----------|------|"
+                sep_line += "\n"
+                markdown += sep_line
+            first_group = False
+            
+            # Add data rows
+            for row in group_data:
+                line = f"| {dataset_name} | {row['loss']} |"
+                for k in k_values:
+                    our_val = row[f"NDCG@{k}"]
+                    imp_val = row[f"Imp%_NDCG@{k}"]
+                    
+                    # Format numerical values
+                    our_str = f"{our_val:.4f}" if our_val != "N/A" else "N/A"
+                    
+                    # Format Imp%, mark numbers in blue
+                    if imp_val and imp_val != "N/A":
+                        imp_str = f'<span style="color:blue">{imp_val}</span>'
+                    else:
+                        imp_str = ""
+                    
+                    line += f" {our_str} | {imp_str} |"
+                line += "\n"
+                markdown += line
+        
+        markdown += f"\n## Notes\n"
+        markdown += f"- NDCG@K: Our experiment results using {backbone} backbone\n"
+        markdown += f"- Imp%: Our improvement percentage of SL@K relative to best baseline for {backbone} backbone (only shown for SLatK method)\n"
+        markdown += f"- This table extends Table 3 analysis to {backbone} backbone to test the generalizability of the SL@K method\n"
+        markdown += f"- Only Health and Electronic datasets are included (same as original Table 3)\n"
+        markdown += f"- Results help understand whether SL@K improvements are specific to MF backbone or generalizable to other architectures\n"
+        
+        return markdown
+
+    def to_backbone_table4_markdown(self, table4_data: List[Dict[str, Any]], backbone: str) -> str:
+        """
+        Convert backbone-specific Table 4 data to markdown format (Performance analysis of SL@K method with different K values)
+        """
+        if not table4_data:
+            return f"# Table 4 Extended: {backbone} Backbone SL@K Performance Analysis\n\nNo relevant data found.\n"
+        
+        # Group by dataset
+        grouped_data = defaultdict(list)
+        for row in table4_data:
+            key = row["dataset"]
+            grouped_data[key].append(row)
+        
+        # Sort by key
+        sorted_groups = sorted(grouped_data.items())
+        
+        markdown = f"# Table 4 Extended: {backbone} Backbone SL@K Performance Analysis\n\n"
+        markdown += f"This table shows the performance of SL@K method with different K values using {backbone} backbone "
+        markdown += "on Health and Electronic datasets, extending the analysis beyond MF backbone.\n\n"
+        
+        # Extract all SL@K variants from data
+        all_variants = set()
+        for row in table4_data:
+            for key in row.keys():
+                if key.startswith("NDCG@") and "_SL@" in key:
+                    # Extract variant name (e.g., "SL@5" from "NDCG@20_SL@5")
+                    variant = key.split("_")[1]
+                    all_variants.add(variant)
+        
+        if not all_variants:
+            return f"# Table 4 Extended: {backbone} Backbone SL@K Performance Analysis\n\nNo SL@K variants found.\n"
+        
+        # Sort variants by K value
+        sorted_variants = sorted(all_variants, key=lambda x: (
+            999 if "∞" in x else int(x.split("@")[1]) if "@" in x and x.split("@")[1].isdigit() else 0
+        ))
+        
+        # Create table header
+        header = "| Dataset | Metric |"
+        for variant in sorted_variants:
+            header += f" {variant} |"
+        header += "\n"
+        
+        # Create separator line
+        separator = "|---------|--------|"
+        for variant in sorted_variants:
+            separator += "----------|"
+        separator += "\n"
+        
+        markdown += header + separator
+        
+        # Add data rows, separated by groups
+        first_group = True
+        for dataset_name, group_data in sorted_groups:
+            
+            # If not first group, add separator line
+            if not first_group:
+                sep_line = "|---------|--------|"
+                for variant in sorted_variants:
+                    sep_line += "----------|"
+                sep_line += "\n"
+                markdown += sep_line
+            first_group = False
+            
+            # Add data rows
+            for row in group_data:
+                line = f"| {dataset_name} | {row['metric']} |"
+                for variant in sorted_variants:
+                    value_key = f"{row['metric']}_{variant}"
+                    value = row.get(value_key, "N/A")
+                    
+                    # Format numerical values
+                    value_str = f"{value:.4f}" if value != "N/A" else "N/A"
+                    line += f" {value_str} |"
+                line += "\n"
+                markdown += line
+        
+        markdown += f"\n## Notes\n"
+        markdown += f"- SL@K: Results of SL@K method with different K values using {backbone} backbone\n"
+        markdown += f"- This table extends Table 4 analysis to {backbone} backbone to test the generalizability across different K values\n"
+        markdown += f"- Only Health and Electronic datasets are included (same as original Table 4)\n"
+        markdown += f"- Results help understand how different K values affect performance on different backbone architectures\n"
+        markdown += f"- SL@K indicates SL method trained with K value\n"
+        
+        return markdown
+
 
 class ExperimentResultAnalyzer:
     """Experiment result analyzer main class"""
@@ -1076,21 +1454,46 @@ class ExperimentResultAnalyzer:
         
         # Select best records
         best = self.selector.pick_best(records)
-        print(f"Summarized {len(best)} optimal records")
+        print(f"Summarized {len(best)} optimal records (using SL@20 for SLatK)")
+        
+        # Select best records for extended analysis (allows optimal K for SLatK)
+        best_extended = self.selector.pick_best_for_table3_extended(records)
+        print(f"Summarized {len(best_extended)} optimal records for extended analysis (using optimal SL@K)")
 
-        # Generate Table2 comparison report
+        # Generate Table2 comparison report (includes all datasets: health, electronic, gowalla, book)
         self._generate_table2_comparison(best, str(author_table2_path), compare_csv, compare_md)
         
-        # Generate Table3 comparison report
-        self._generate_table3_comparison(best, str(author_table3_path), table3_csv, table3_md)
+        # Generate Table3 comparison report (only health, electronic)
+        # Note: Table 3 uses optimal SL@K (not restricted to k=20) to match author's SL@K approach
+        self._generate_table3_comparison(best_extended, str(author_table3_path), table3_csv, table3_md)
         
-        # Generate Table4 comparison report - need to pass all original records to get different K value SLatK experiments
+        # Generate Table4 comparison report (only health, electronic)
         self._generate_table4_comparison(records, str(author_table4_path), table4_csv, table4_md)
+
+        # Generate extended NDCG@K comparison for XSimGCL and LightGCN backbones
+        # (to test generalizability of results beyond MF backbone)
+        xsimgcl_csv = output_path / "table3_xsimgcl_ndcg.csv"
+        xsimgcl_md = output_path / "table3_xsimgcl_ndcg.md"
+        lightgcn_csv = output_path / "table3_lightgcn_ndcg.csv"
+        lightgcn_md = output_path / "table3_lightgcn_ndcg.md"
+        
+        self._generate_extended_ndcg_comparison(best, best_extended, "XSimGCL", xsimgcl_csv, xsimgcl_md)
+        self._generate_extended_ndcg_comparison(best, best_extended, "LightGCN", lightgcn_csv, lightgcn_md)
+
+        # Generate extended Table 4 analysis for XSimGCL and LightGCN backbones
+        # (to test SL@K performance with different K values across different architectures)
+        xsimgcl_table4_csv = output_path / "table4_xsimgcl_analysis.csv"
+        xsimgcl_table4_md = output_path / "table4_xsimgcl_analysis.md"
+        lightgcn_table4_csv = output_path / "table4_lightgcn_analysis.csv"
+        lightgcn_table4_md = output_path / "table4_lightgcn_analysis.md"
+        
+        self._generate_backbone_table4_analysis(records, "XSimGCL", xsimgcl_table4_csv, xsimgcl_table4_md)
+        self._generate_backbone_table4_analysis(records, "LightGCN", lightgcn_table4_csv, lightgcn_table4_md)
 
     def _generate_table2_comparison(self, best_records: List[ExperimentRecord], 
                                    author_table2_path: str, compare_csv: pathlib.Path, 
                                    compare_md: pathlib.Path):
-        """Generate Table2 comparison report"""
+        """Generate Table2 comparison report (includes all datasets: health, electronic, gowalla, book)"""
         # Load author results and generate comparison table
         author_dict, imp_dict = self.author_loader.load_author_results(author_table2_path)
         if author_dict:
@@ -1165,6 +1568,47 @@ class ExperimentResultAnalyzer:
         else:
             print("[WARN] Unable to load author Table 4 results, skipping Table 4 comparison")
 
+    def _generate_extended_ndcg_comparison(self, best_records: List[ExperimentRecord], 
+                                          extended_records: List[ExperimentRecord], 
+                                          backbone: str, extended_csv: pathlib.Path, 
+                                          extended_md: pathlib.Path):
+        """Generate extended NDCG@K comparison for specified backbone (XSimGCL or LightGCN)"""
+        extended_data = self.table_generator.create_extended_ndcg_table(best_records, backbone, extended_records)
+        
+        # Save extended NDCG@K results CSV
+        if extended_data:
+            extended_df = pd.DataFrame(extended_data)
+            extended_df.to_csv(extended_csv, index=False, float_format="%.4f")
+            print(f"{backbone} backbone extended NDCG@K results CSV written to {extended_csv}")
+        else:
+            print(f"[WARN] No {backbone} backbone data found, skipping {backbone} extended table")
+        
+        # Generate and save extended NDCG@K results Markdown
+        extended_md_content = self.formatter.to_extended_ndcg_markdown(extended_data, backbone)
+        with open(extended_md, "w", encoding="utf-8") as f:
+            f.write(extended_md_content)
+        print(f"{backbone} backbone extended NDCG@K results Markdown written to {extended_md}")
+
+    def _generate_backbone_table4_analysis(self, all_records: List[ExperimentRecord], 
+                                          backbone: str, table4_csv: pathlib.Path, 
+                                          table4_md: pathlib.Path):
+        """Generate Table 4 style analysis for specified backbone (XSimGCL or LightGCN)"""
+        table4_data = self.table_generator.create_backbone_table4_analysis(all_records, backbone)
+        
+        # Save Table 4 analysis results CSV
+        if table4_data:
+            table4_df = pd.DataFrame(table4_data)
+            table4_df.to_csv(table4_csv, index=False, float_format="%.4f")
+            print(f"{backbone} backbone Table 4 analysis CSV written to {table4_csv}")
+        else:
+            print(f"[WARN] No {backbone} backbone SL@K data found, skipping {backbone} Table 4 analysis")
+        
+        # Generate and save Table 4 analysis Markdown
+        table4_md_content = self.formatter.to_backbone_table4_markdown(table4_data, backbone)
+        with open(table4_md, "w", encoding="utf-8") as f:
+            f.write(table4_md_content)
+        print(f"{backbone} backbone Table 4 analysis Markdown written to {table4_md}")
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -1179,11 +1623,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-'''
-python process_utils/parse_results_refactored.py --root experiment_results --output_dir result_analysis/comparison
-'''
-
-'''
-zip -r comparison.zip result_analysis/comparison
-'''

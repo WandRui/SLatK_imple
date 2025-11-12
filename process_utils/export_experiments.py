@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# python process_utils/export_experiments.py > logs/export_result.log
 """
 Script to process NNI experiments with STOPPED status.
 For each stopped experiment, it will:
@@ -12,6 +13,7 @@ import subprocess
 import time
 import os
 from pathlib import Path
+from tqdm import tqdm
 
 def load_experiments(experiment_file_path):
     """Load experiments from the .experiment file."""
@@ -101,7 +103,7 @@ def process_stopped_experiments():
     # Filter stopped experiments - process if not in valid_experiments (include empty ones for reprocessing)
     stopped_experiments = {
         exp_id: exp_data for exp_id, exp_data in experiments.items()
-        if exp_data.get('status') == 'STOPPED' and exp_data.get('experimentName') not in valid_experiments
+        if exp_data.get('status') == 'STOPPED' and exp_data.get('experimentName') not in valid_experiments and exp_data.get("endTime") != "N/A"
     }
 
     # Show which experiments will be reprocessed due to empty results
@@ -124,44 +126,100 @@ def process_stopped_experiments():
         print("No stopped experiments to process.")
         return
     
-    # Process each stopped experiment
-    for i, (exp_id, exp_data) in enumerate(stopped_experiments.items(), 1):
-        if not exp_data:
-            print(f"No Experiment data for ID {exp_id} is missing or invalid. Skipping.")
-            continue
-        experiment_name = exp_data.get('experimentName', f'experiment_{exp_id}')
-        
-        print(f"\n{'='*60}")
-        print(f"Processing experiment {i}/{len(stopped_experiments)}")
-        print(f"ID: {exp_id}")
-        print(f"Name: {experiment_name}")
-        print(f"{'='*60}")
-        
-        # Step 1: View experiment (wait 2 seconds)
-        print(f"\nStep 1: Viewing experiment {exp_id}")
-        run_command(f"nnictl view {exp_id} --port {exp_data.get('port', 8080)}", wait_time=8)
-        
-        # Step 2: Export experiment (wait 2 seconds)
-        print(f"\nStep 2: Exporting experiment {exp_id}")
-        export_filename = f"experiment_results/{experiment_name}.json"
-        export_success = run_command(f"nnictl experiment export {exp_id} --filename {export_filename} --type json", wait_time=5)
-        
-        # Check if exported file is empty
-        if export_success and Path(export_filename).exists():
-            if is_json_file_empty_list(export_filename):
-                print(f"⚠️  WARNING: Exported file {export_filename} contains an empty list - experiment may have failed!")
-            else:
-                print(f"✓ Successfully exported non-empty results to {export_filename}")
-        
-        # Step 3: Stop experiment
-        print(f"\nStep 3: Stopping experiment {exp_id}")
-        run_command(f"nnictl stop {exp_id}")
-        
-        print(f"✓ Completed processing experiment {exp_id}")
+    # Statistics tracking
+    success_count = 0
+    fail_count = 0
+    error_experiments = []  # Experiments that failed due to command errors
+    empty_file_experiments = []  # Experiments that produced empty files
     
-    print(f"\n{'='*60}")
+    # Process each stopped experiment
+    with tqdm(total=len(stopped_experiments), desc="Processing experiments", 
+              bar_format="{desc}: {percentage:3.0f}%|{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}]") as pbar:
+        for i, (exp_id, exp_data) in enumerate(stopped_experiments.items(), 1):
+            if not exp_data:
+                print(f"No Experiment data for ID {exp_id} is missing or invalid. Skipping.")
+                error_experiments.append((exp_id, "N/A", "Missing experiment data"))
+                fail_count += 1
+                pbar.update(1)
+                continue
+            experiment_name = exp_data.get('experimentName', f'experiment_{exp_id}')
+            
+            print(f"\n{'='*60}")
+            print(f"Processing experiment {i}/{len(stopped_experiments)}")
+            print(f"ID: {exp_id}")
+            print(f"Name: {experiment_name}")
+            print(f"{'='*60}")
+            
+            # Step 1: View experiment (wait 2 seconds)
+            print(f"\nStep 1: Viewing experiment {exp_id}")
+            view_success = run_command(f"nnictl view {exp_id} --port {exp_data.get('port', 8080)}", wait_time=8)
+            
+            # Step 2: Export experiment (wait 2 seconds)
+            print(f"\nStep 2: Exporting experiment {exp_id}")
+            export_filename = f"experiment_results/{experiment_name}.json"
+            export_success = run_command(f"nnictl experiment export {exp_id} --filename {export_filename} --type json", wait_time=5)
+            
+            # Determine if this experiment was successful
+            experiment_success = False
+            failure_reason = None
+            
+            if not export_success:
+                failure_reason = "Export command failed"
+                error_experiments.append((exp_id, experiment_name, failure_reason))
+            elif not Path(export_filename).exists():
+                failure_reason = "Export file was not created"
+                error_experiments.append((exp_id, experiment_name, failure_reason))
+            elif is_json_file_empty_list(export_filename):
+                failure_reason = "Export file contains empty list"
+                empty_file_experiments.append((exp_id, experiment_name, export_filename))
+            else:
+                experiment_success = True
+                print(f"✓ Successfully exported non-empty results to {export_filename}")
+            
+            if experiment_success:
+                success_count += 1
+            else:
+                fail_count += 1
+                print(f"⚠️  FAILED: {failure_reason}")
+            
+            # Step 3: Stop experiment
+            print(f"\nStep 3: Stopping experiment {exp_id}")
+            run_command(f"nnictl stop {exp_id}")
+            
+            status_symbol = "✓" if experiment_success else "✗"
+            print(f"{status_symbol} Completed processing experiment {exp_id} ({'SUCCESS' if experiment_success else 'FAILED'})")
+            pbar.update(1)
+    
+    # Final statistics report
+    print(f"\n{'='*80}")
+    print(f"FINAL PROCESSING REPORT")
+    print(f"{'='*80}")
+    print(f"Total experiments processed: {len(stopped_experiments)}")
+    print(f"Successful exports: {success_count}")
+    print(f"Failed exports: {fail_count}")
+    print(f"Success rate: {100*success_count/len(stopped_experiments):.1f}%")
+    
+    # Report error details
+    if error_experiments:
+        print(f"\n🔴 COMMAND/ERROR FAILURES ({len(error_experiments)}):")
+        for exp_id, exp_name, reason in error_experiments:
+            print(f"  - {exp_id} ({exp_name}): {reason}")
+    
+    if empty_file_experiments:
+        print(f"\n🟡 EMPTY FILE FAILURES ({len(empty_file_experiments)}):")
+        for exp_id, exp_name, filename in empty_file_experiments:
+            print(f"  - {exp_id} ({exp_name}): {filename}")
+    
+    if success_count == len(stopped_experiments):
+        print(f"\n🎉 ALL EXPERIMENTS PROCESSED SUCCESSFULLY!")
+    elif success_count > 0:
+        print(f"\n⚠️  PARTIAL SUCCESS: {success_count}/{len(stopped_experiments)} experiments exported successfully")
+    else:
+        print(f"\n❌ NO EXPERIMENTS EXPORTED SUCCESSFULLY")
+        
+    print(f"{'='*80}")
     print(f"✓ All {len(stopped_experiments)} stopped experiments have been processed!")
-    print(f"{'='*60}")
+    print(f"{'='*80}")
 
 if __name__ == "__main__":
     print("NNI Stopped Experiments Processor")
