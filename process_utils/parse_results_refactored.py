@@ -6,7 +6,7 @@ python process_utils/parse_results_refactored.py --root experiment_results --out
 '''
 
 '''
-zip -r zipped_result/comparisonV2.zip result_analysis/comparison
+zip -r zipped_result/comparisonV3.zip result_analysis/comparison
 '''
 
 """

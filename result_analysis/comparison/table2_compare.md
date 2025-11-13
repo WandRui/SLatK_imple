@@ -10,11 +10,15 @@ The following is a comparison between our experiment results and the author's re
 | book | MF | GuidedRec | 0.0388 | 0.0518 | <span style="color:red">-0.0130</span> | 0.0273 | 0.0361 | -0.0088 |  |  |  |  |
 | book | MF | LLPAUC | 0.0851 | 0.1150 | <span style="color:red">-0.0299</span> | 0.0610 | 0.0811 | <span style="color:red">-0.0201</span> |  |  |  |  |
 | book | MF | PSL | 0.0902 | 0.1569 | <span style="color:red">-0.0667</span> | 0.0676 | 0.1227 | <span style="color:red">-0.0551</span> |  |  |  |  |
+| book | MF | SLatK | 0.0923 | 0.1612 | <span style="color:red">-0.0689</span> | 0.0694 | 0.1269 | <span style="color:red">-0.0575</span> | <span style="color:blue">+2.74% (vs PSL)</span> | <span style="color:blue">+3.42% (vs PSL)</span> | <span style="color:blue">+0.76% (vs BSL)</span> | <span style="color:blue">+0.96% (vs BSL)</span> |
 | book | MF | SONGatK | 0.0847 | 0.0747 | 0.0100 | 0.0620 | 0.0542 | 0.0078 |  |  |  |  |
 | book | MF | Softmax | 0.0913 | 0.1559 | <span style="color:red">-0.0646</span> | 0.0683 | 0.1210 | <span style="color:red">-0.0527</span> |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| book | XSimGCL | BPR | 0.0678 | 0.1269 | <span style="color:red">-0.0591</span> | 0.0491 | 0.0905 | <span style="color:red">-0.0414</span> |  |  |  |  |
+| book | XSimGCL | LLPAUC | 0.0765 | 0.1363 | <span style="color:red">-0.0598</span> | 0.0544 | 0.1008 | <span style="color:red">-0.0464</span> |  |  |  |  |
 | book | XSimGCL | PSL | 0.0800 | 0.1571 | <span style="color:red">-0.0771</span> | 0.0590 | 0.1228 | <span style="color:red">-0.0638</span> |  |  |  |  |
-| book | XSimGCL | SLatK | 0.0752 | 0.1624 | <span style="color:red">-0.0872</span> | 0.0546 | 0.1277 | <span style="color:red">-0.0731</span> | <span style="color:blue">+3.37% (vs PSL)</span> | <span style="color:blue">+3.99% (vs PSL)</span> | <span style="color:blue">-5.89% (vs PSL)</span> | <span style="color:blue">-7.43% (vs PSL)</span> |
+| book | XSimGCL | SLatK | 0.0752 | 0.1624 | <span style="color:red">-0.0872</span> | 0.0546 | 0.1277 | <span style="color:red">-0.0731</span> | <span style="color:blue">+3.37% (vs PSL)</span> | <span style="color:blue">+3.99% (vs PSL)</span> | <span style="color:blue">-7.68% (vs Softmax)</span> | <span style="color:blue">-8.47% (vs Softmax)</span> |
+| book | XSimGCL | Softmax | 0.0815 | 0.1549 | <span style="color:red">-0.0734</span> | 0.0597 | 0.1207 | <span style="color:red">-0.0610</span> |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | electronic | LightGCN | AdvInfoNCE | 0.0836 | 0.0823 | 0.0013 | 0.0531 | 0.0528 | 0.0003 |  |  |  |  |
 | electronic | LightGCN | BPR | 0.0390 | 0.0813 | <span style="color:red">-0.0423</span> | 0.0224 | 0.0524 | <span style="color:red">-0.0300</span> |  |  |  |  |
@@ -46,9 +50,14 @@ The following is a comparison between our experiment results and the author's re
 | electronic | XSimGCL | SONGatK | 0.0486 | 0.0525 | -0.0039 | 0.0292 | 0.0320 | -0.0028 |  |  |  |  |
 | electronic | XSimGCL | Softmax | 0.0752 | 0.0772 | -0.0020 | 0.0477 | 0.0490 | -0.0013 |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| gowalla | LightGCN | AdvInfoNCE | 0.1454 | 0.2066 | <span style="color:red">-0.0612</span> | 0.1116 | 0.1625 | <span style="color:red">-0.0509</span> |  |  |  |  |
 | gowalla | LightGCN | BPR | 0.0641 | 0.1745 | <span style="color:red">-0.1104</span> | 0.0437 | 0.1402 | <span style="color:red">-0.0965</span> |  |  |  |  |
+| gowalla | LightGCN | BSL | 0.1460 | 0.2069 | <span style="color:red">-0.0609</span> | 0.1130 | 0.1628 | <span style="color:red">-0.0498</span> |  |  |  |  |
+| gowalla | LightGCN | GuidedRec | 0.0864 | 0.0921 | -0.0057 | 0.0643 | 0.0686 | -0.0043 |  |  |  |  |
 | gowalla | LightGCN | LLPAUC | 0.1381 | 0.1616 | <span style="color:red">-0.0235</span> | 0.1023 | 0.1192 | <span style="color:red">-0.0169</span> |  |  |  |  |
 | gowalla | LightGCN | PSL | 0.1419 | 0.2086 | <span style="color:red">-0.0667</span> | 0.1097 | 0.1648 | <span style="color:red">-0.0551</span> |  |  |  |  |
+| gowalla | LightGCN | SLatK | 0.1514 | 0.2128 | <span style="color:red">-0.0614</span> | 0.1174 | 0.1729 | <span style="color:red">-0.0555</span> | <span style="color:blue">+2.01% (vs PSL)</span> | <span style="color:blue">+4.92% (vs PSL)</span> | <span style="color:blue">+1.63% (vs SONGatK)</span> | <span style="color:blue">+1.52% (vs SONGatK)</span> |
+| gowalla | LightGCN | SONGatK | 0.1489 | 0.1261 | <span style="color:green">0.0228</span> | 0.1156 | 0.0968 | <span style="color:green">0.0188</span> |  |  |  |  |
 | gowalla | LightGCN | Softmax | 0.1461 | 0.2068 | <span style="color:red">-0.0607</span> | 0.1129 | 0.1628 | <span style="color:red">-0.0499</span> |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | gowalla | MF | AdvInfoNCE | 0.1469 | 0.2067 | <span style="color:red">-0.0598</span> | 0.1127 | 0.1627 | <span style="color:red">-0.0500</span> |  |  |  |  |
@@ -67,6 +76,8 @@ The following is a comparison between our experiment results and the author's re
 | gowalla | XSimGCL | GuidedRec | 0.1124 | 0.1685 | <span style="color:red">-0.0561</span> | 0.0816 | 0.1277 | <span style="color:red">-0.0461</span> |  |  |  |  |
 | gowalla | XSimGCL | LLPAUC | 0.1181 | 0.1632 | <span style="color:red">-0.0451</span> | 0.0856 | 0.1200 | <span style="color:red">-0.0344</span> |  |  |  |  |
 | gowalla | XSimGCL | PSL | 0.1240 | 0.2037 | <span style="color:red">-0.0797</span> | 0.0943 | 0.1593 | <span style="color:red">-0.0650</span> |  |  |  |  |
+| gowalla | XSimGCL | SLatK | 0.1242 | 0.2095 | <span style="color:red">-0.0853</span> | 0.0934 | 0.1717 | <span style="color:red">-0.0783</span> | <span style="color:blue">+2.85% (vs BSL)</span> | <span style="color:blue">+7.51% (vs BSL)</span> | <span style="color:blue">-2.07% (vs Softmax)</span> | <span style="color:blue">-8.07% (vs AdvInfoNCE)</span> |
+| gowalla | XSimGCL | SONGatK | 0.0956 | 0.1367 | <span style="color:red">-0.0411</span> | 0.0689 | 0.0985 | <span style="color:red">-0.0296</span> |  |  |  |  |
 | gowalla | XSimGCL | Softmax | 0.1268 | 0.2005 | <span style="color:red">-0.0737</span> | 0.0960 | 0.1570 | <span style="color:red">-0.0610</span> |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | health | LightGCN | AdvInfoNCE | 0.1715 | 0.1706 | 0.0009 | 0.1254 | 0.1264 | -0.0010 |  |  |  |  |
